@@ -743,7 +743,7 @@ const About: React.FC = () => {
     { id: 'soft', label: 'Soft Skills', color: 'bg-gray-200 dark:bg-gray-800 text-gray-800 dark:text-gray-200' },
   ];
   const [activeGroup, setActiveGroup] = useState('all');
-  // NEW CODE - TESTING: Spotlight glow state for About title card
+  // Spotlight glow state for About title card
   const titleCardRef = useRef<HTMLDivElement>(null);
   const [titleSpotlightPos, setTitleSpotlightPos] = useState<{ x: number; y: number }>({ x: 0, y: 0 });
   const [titleSpotlightOpacity, setTitleSpotlightOpacity] = useState(0);
@@ -758,7 +758,7 @@ const About: React.FC = () => {
   // Helper: compute perceived luminance to decide when to keep white
   const getLuminance = (r: number, g: number, b: number) => 0.2126 * r + 0.7152 * g + 0.0722 * b;
   const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(max, v));
-  // NEW CODE - TESTING: live sampling while hovered
+  // Live sampling while hovered
   const hoverRAF = useRef<number | null>(null);
   const isHoveringRef = useRef(false);
   const sampleSpotlightColor = useCallback(() => {
@@ -804,7 +804,7 @@ const About: React.FC = () => {
     return () => stopHoverSampling();
   }, [stopHoverSampling]);
 
-  // NEW CODE - TESTING: Always-on inner glow color sampling at each side (while section is in view)
+  // Always-on inner glow color sampling at each side (while section is in view)
   const innerGlowRAF = useRef<number | null>(null);
   const sampleInnerGlowEdges = useCallback(() => {
     if (!titleCardRef.current) return;
@@ -875,9 +875,7 @@ const About: React.FC = () => {
         const r = parseInt(match[1], 10);
         const g = parseInt(match[2], 10);
         const b = parseInt(match[3], 10);
-        // # OLD CODE - KEEP UNTIL CONFIRMED WORKING (spotlight used sampled color)
-        // setTitleSpotlightColor(`rgba(${r},${g},${b},0.65)`);
-        // # NEW CODE - TESTING: spotlight remains white; use sampled color for inner glow
+        // Spotlight remains white; use sampled color for inner glow
         setTitleInnerGlowColor(`rgba(${r},${g},${b},0.35)`);
       } else {
         setTitleInnerGlowColor('rgba(255,255,255,0.25)');
@@ -1153,22 +1151,7 @@ const About: React.FC = () => {
           ) : (
             <>
               <div className="container-max">
-                {/* # OLD CODE - KEEP UNTIL CONFIRMED WORKING
-                <motion.div
-                  initial={{ opacity: 0, y: 50 }}
-                  animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.8 }}
-                  className="text-center mb-16 bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/30 dark:border-dark-700/40"
-                >
-                  <h2 className="text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">
-                    About Me
-                  </h2>
-                  <p className="text-xl text-secondary-600 dark:text-secondary-300 max-w-3xl mx-auto">
-                    Adaptable technologist, creative problem-solver, and lifelong learner—driven to bridge gaps, empower others, and thrive at the intersection of technology and real-world impact.
-                  </p>
-                </motion.div>
-                */}
-                {/* # NEW CODE - TESTING */}
+                {/* Header card */}
                 <motion.div
                   initial={{ opacity: 0, y: 50 }}
                   animate={inView ? { opacity: 1, y: 0 } : {}}
@@ -1176,31 +1159,7 @@ const About: React.FC = () => {
                   className="text-center mb-16"
                 >
                   <div className="max-w-4xl mx-auto">
-                    {/* # OLD CODE - KEEP UNTIL CONFIRMED WORKING (GlassCard variant) */}
-                    {/**
-                    <GlassCard className="rounded-2xl">
-                      <div className="rounded-2xl p-8">
-                        <h2 className="text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">
-                          About Me
-                        </h2>
-                        <p className="text-xl text-secondary-600 dark:text-secondary-300 max-w-3xl mx-auto">
-                          Adaptable technologist, creative problem-solver, and lifelong learner—driven to bridge gaps, empower others, and thrive at the intersection of technology and real-world impact.
-                        </p>
-                      </div>
-                    </GlassCard>
-                    */}
-                    {/* # NEW CODE - TESTING: Badge-themed container */}
-                    {/* # OLD CODE - KEEP UNTIL CONFIRMED WORKING (no glow)
-                    <div className="bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/30 dark:border-dark-700/40 pointer-events-auto hover:shadow-xl hover:bg-white/55 dark:hover:bg-dark-800/45 transition-all duration-300">
-                    */}
-                    {/* # OLD CODE - KEEP UNTIL CONFIRMED WORKING (no spotlight) */}
-                    {/**
-                    <div className="bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/30 dark:border-dark-700/40 pointer-events-auto hover:shadow-xl hover:bg-white/55 dark:hover:bg-dark-800/45 transition-all duration-300 ring-1 ring-white/40 dark:ring-white/15 hover:ring-white/50 dark:hover:ring-white/20">
-                      <h2 className="text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">About Me</h2>
-                      <p className="text-xl text-secondary-600 dark:text-secondary-300 max-w-3xl mx-auto">Adaptable technologist, creative problem-solver, and lifelong learner—driven to bridge gaps, empower others, and thrive at the intersection of technology and real-world impact.</p>
-                    </div>
-                    */}
-                    {/* # NEW CODE - TESTING: Spotlight hover effect */}
+                    {/* Badge-themed container with Spotlight hover effect */}
                     <SpotlightGlow className="bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/30 dark:border-dark-700/40 pointer-events-auto hover:shadow-xl hover:bg-white/55 dark:hover:bg-dark-800/45 transition-all duration-300 ring-1 ring-white/40 dark:ring-white/15 hover:ring-white/50 dark:hover:ring-white/20">
                       <h2 className="text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">About Me</h2>
                       <p className="text-xl text-secondary-600 dark:text-secondary-300 max-w-3xl mx-auto">
@@ -1425,7 +1384,7 @@ const About: React.FC = () => {
                   return (
                     <span
                       key={skill.name}
-                      className={`px-4 py-2 rounded-full shadow-sm font-medium !font-normal text-base transition-all duration-200 ${groupColor} ${ringClass} ${isActive ? 'opacity-100 scale-100 hover:scale-105 hover:shadow-md' : 'opacity-40 scale-95 pointer-events-none'}`}
+                      className={`px-4 py-2 rounded-full shadow-sm font-medium text-base transition-all duration-200 ${groupColor} ${ringClass} ${isActive ? 'opacity-100 scale-100 hover:scale-105 hover:shadow-md' : 'opacity-40 scale-95 pointer-events-none'}`}
                     >
                       {skill.name}
                     </span>

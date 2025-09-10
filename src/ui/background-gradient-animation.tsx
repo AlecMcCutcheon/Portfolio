@@ -59,9 +59,42 @@ export const BackgroundGradientAnimation = ({
   const animationFrameRef = useRef<number | null>(null);
 
   // Multiple animated blobs for the mouse gradient
+  const [isTouch, setIsTouch] = useState(false);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  useEffect(() => {
+    const detect = () => {
+      // Consider as touch-only when device supports touch but does NOT support hover
+      const hoverCapable = window.matchMedia('(hover: hover)').matches;
+      const supportsTouch = ('ontouchstart' in window) || ((navigator as any).maxTouchPoints > 0);
+      const touchOnly = supportsTouch && !hoverCapable;
+      setIsTouch(touchOnly);
+    };
+    detect();
+    const mmHover = window.matchMedia('(hover: hover)');
+    mmHover.addEventListener('change', detect);
+    window.addEventListener('resize', detect);
+    return () => {
+      mmHover.removeEventListener('change', detect);
+      window.removeEventListener('resize', detect);
+    };
+  }, []);
+
+  // Track mobile breakpoint as small screen as well
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 768px)');
+    const update = () => setIsSmallScreen(media.matches);
+    update();
+    media.addEventListener('change', update);
+    window.addEventListener('resize', update);
+    return () => {
+      media.removeEventListener('change', update);
+      window.removeEventListener('resize', update);
+    };
+  }, []);
+
   const BLOB_RADIUS_MIN = 24; // px (smaller)
   const BLOB_RADIUS_MAX = 56; // px (smaller)
-  const BLOB_COUNT = 14;
+  const BLOB_COUNT = (typeof window !== 'undefined' && window.matchMedia('(max-width: 768px)').matches) || isSmallScreen || isTouch ? 8 : 14;
   const [blobs, setBlobs] = useState(() => 
     Array.from({ length: BLOB_COUNT }, (_, i) => ({
       id: i,
@@ -237,23 +270,10 @@ export const BackgroundGradientAnimation = ({
     const sampleY = normalizedY * height;
     // Debug: log animated blob positions and sample info
     if (animatedBlobs && Array.isArray(animatedBlobs)) {
-      // # OLD CODE - KEEP UNTIL CONFIRMED WORKING
-      // console.log('[getBackgroundColorAt] sample', {
-      //   sampleX, sampleY, animatedBlobs: animatedBlobs.map(b => ({ x: b.x, y: b.y, radius: b.radius, color: b.color }))
-      // });
-      // # NEW CODE - TESTING: plain text log
-      // console.log(`getBackgroundColorAt: sample (${sampleX.toFixed(1)}, ${sampleY.toFixed(1)})`);
+      // sampling active
     }
     if (animatedBlobs && Array.isArray(animatedBlobs) && animatedBlobs.length > 0) {
-      // # OLD CODE - KEEP UNTIL CONFIRMED WORKING
-      // if (totalWeight > 0) {
-      //   blended = blended.map(c => Math.round(c / totalWeight)) as [number, number, number];
-      //   const colorString = `rgb(${blended[0]},${blended[1]},${blended[2]})`;
-      //   // # NEW CODE - TESTING: plain text log for result
-      //   // console.log(`getBackgroundColorAt: result at (${sampleX.toFixed(1)}, ${sampleY.toFixed(1)}): ${colorString}`);
-      //   return colorString;
-      // }
-      // # NEW CODE - TESTING: only inner 50% of radius contributes
+      // only inner 50% of radius contributes
       let sum = [0, 0, 0];
       let totalWeight = 0;
       animatedBlobs.forEach((blob: any, i: number) => {
@@ -287,18 +307,10 @@ export const BackgroundGradientAnimation = ({
         // console.log(`getBackgroundColorAt: result at (${sampleX.toFixed(1)}, ${sampleY.toFixed(1)}): ${colorString} (CSS-matched blend)`);
         return colorString;
       }
-      // # NEW CODE - TESTING: fallback to background color if not enough blob influence
+      // fallback to background color if not enough blob influence
       const bgColorString = `rgb(${gradColor[0]},${gradColor[1]},${gradColor[2]})`;
       // console.log(`getBackgroundColorAt: result at (${sampleX.toFixed(1)}, ${sampleY.toFixed(1)}): ${bgColorString} (background)`);
       return bgColorString;
-      // # OLD CODE - KEEP UNTIL CONFIRMED WORKING
-      // if (totalWeight > 0) {
-      //   blended = blended.map(c => Math.round(c / totalWeight)) as [number, number, number];
-      //   const colorString = `rgb(${blended[0]},${blended[1]},${blended[2]})`;
-      //   // # NEW CODE - TESTING: plain text log for result
-      //   // console.log(`getBackgroundColorAt: result at (${sampleX.toFixed(1)}, ${sampleY.toFixed(1)}): ${colorString}`);
-      //   return colorString;
-      // }
     }
     // Fallback to gradient color
     return `rgb(${gradColor[0]},${gradColor[1]},${gradColor[2]})`;
@@ -577,9 +589,7 @@ export const BackgroundGradientAnimation = ({
       (window as any).__backgroundBlobs = [...blobs, ...pointerBlobs];
     }
     updateLiveBlobPositions();
-    // # OLD CODE - KEEP UNTIL CONFIRMED WORKING
-    // const interval = setInterval(updateLiveBlobPositions, 1000 / 30); // 30fps
-    // # NEW CODE - TESTING: increase sampling rate for smoother color reads (60fps)
+    // increase sampling rate for smoother color reads (60fps)
     const interval = setInterval(updateLiveBlobPositions, 1000 / 60); // 60fps
     return () => clearInterval(interval);
   }, [containerRef]);
@@ -592,7 +602,7 @@ export const BackgroundGradientAnimation = ({
   }, []);
 
   // Set to false to disable mouse-following blobs
-  const ENABLE_POINTER_BLOBS = true;
+  const ENABLE_POINTER_BLOBS = !(isTouch || isSmallScreen); // disable pointer-following blobs on touch-only or small screens
 
   // Helper: normalize a point to [0,1] within the container
   function normalizeToContainer(x: number, y: number): { normalizedX: number; normalizedY: number } {

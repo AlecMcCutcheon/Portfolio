@@ -116,10 +116,7 @@ const Contact: React.FC = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          {/* # OLD CODE - KEEP UNTIL CONFIRMED WORKING
-          <h2 className="text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">Get In Touch</h2>
-          <p className="text-xl text-secondary-600 dark:text-secondary-300 max-w-3xl mx-auto">I'm always open to discussing new opportunities, creative projects, or just having a chat about technology and innovation.</p>
-          */}
+          {/* Section header */}
           <div className="max-w-4xl mx-auto pointer-events-auto">
             <SpotlightGlow className="bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/30 dark:border-dark-700/40 transition-all duration-300 ring-1 ring-white/40 dark:ring-white/15 hover:shadow-xl hover:bg-white/55 dark:hover:bg-dark-800/45 hover:ring-white/50 dark:hover:ring-white/20">
               <h2 className="text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">Get In Touch</h2>
@@ -203,11 +200,13 @@ const Contact: React.FC = () => {
                 <p className="text-secondary-600 dark:text-secondary-300 mb-2">
                   Currently employed; open to exploring freelance engagements and selectively pivoting into better opportunities.
                 </p>
-                <p className="text-secondary-600 dark:text-secondary-300 mb-2">
-                  Preference: remote roles.
+                <p className="mb-2">
+                  <span className="font-semibold text-primary-700 dark:text-primary-300">Preference:</span>
+                  <span className="ml-1 text-secondary-600 dark:text-secondary-300">Remote or flexible hybrid (e.g., ~1 day/week or as-needed).</span>
                 </p>
-                <p className="text-secondary-600 dark:text-secondary-300">
-                  Response time: 1–3 business days
+                <p>
+                  <span className="font-semibold text-primary-700 dark:text-primary-300">Response time:</span>
+                  <span className="ml-1 text-secondary-600 dark:text-secondary-300">1–3 business days</span>
                 </p>
               </SpotlightGlow>
             </motion.div>

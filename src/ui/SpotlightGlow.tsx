@@ -12,6 +12,48 @@ interface SpotlightGlowProps {
 const SpotlightGlow: React.FC<SpotlightGlowProps> = ({ children, className = '', edgeThickness = 4, insetSample = 8, outerRef }) => {
   const [containerEl, setContainerEl] = useState<HTMLDivElement | null>(null);
   const bgColorCtx = useContext(BackgroundColorContext);
+  // Detect touch/mobile to disable hover & dynamic glow
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
+  const [isSmallScreen, setIsSmallScreen] = useState(false);
+  useEffect(() => {
+    const check = () => {
+      // OLD CODE - KEEP UNTIL CONFIRMED WORKING
+      // const hasTouch = (
+      //   'ontouchstart' in window ||
+      //   (navigator as any).maxTouchPoints > 0 ||
+      //   window.matchMedia('(hover: none)').matches ||
+      //   window.matchMedia('(pointer: coarse)').matches
+      // );
+      // setIsTouchDevice(!!hasTouch);
+
+      // NEW CODE - TESTING: Treat as touch-only only when device supports touch AND lacks hover capability
+      const hoverCapable = window.matchMedia('(hover: hover)').matches;
+      const supportsTouch = ('ontouchstart' in window) || ((navigator as any).maxTouchPoints > 0);
+      const touchOnly = supportsTouch && !hoverCapable;
+      setIsTouchDevice(touchOnly);
+    };
+    check();
+    const mmHover = window.matchMedia('(hover: hover)');
+    mmHover.addEventListener('change', check);
+    window.addEventListener('resize', check);
+    return () => {
+      mmHover.removeEventListener('change', check);
+      window.removeEventListener('resize', check);
+    };
+  }, []);
+
+  // Also disable interactions on small screens (mobile breakpoint)
+  useEffect(() => {
+    const media = window.matchMedia('(max-width: 768px)');
+    const update = () => setIsSmallScreen(media.matches);
+    update();
+    media.addEventListener('change', update);
+    window.addEventListener('resize', update);
+    return () => {
+      media.removeEventListener('change', update);
+      window.removeEventListener('resize', update);
+    };
+  }, []);
   // per-edge colors
   const [topColor, setTopColor] = useState('rgba(255,255,255,0.18)');
   const [rightColor, setRightColor] = useState('rgba(255,255,255,0.18)');
@@ -86,12 +128,19 @@ const SpotlightGlow: React.FC<SpotlightGlowProps> = ({ children, className = '',
     }
   }, []);
 
+  // Disable dynamic inner-glow sampling on touch/mobile or small screens
   useEffect(() => {
+    const interactionsDisabled = isTouchDevice || isSmallScreen;
+    if (interactionsDisabled) {
+      stopLoop();
+      return;
+    }
     startLoop();
     return () => stopLoop();
-  }, [startLoop, stopLoop]);
+  }, [startLoop, stopLoop, isTouchDevice, isSmallScreen]);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (isTouchDevice || isSmallScreen) return;
     if (!containerEl) return;
     const rect = containerEl.getBoundingClientRect();
     setSpotX(e.clientX - rect.left);
@@ -106,8 +155,9 @@ const SpotlightGlow: React.FC<SpotlightGlowProps> = ({ children, className = '',
         else if (outerRef && 'current' in (outerRef as any)) (outerRef as any).current = el;
       }}
       onMouseMove={handleMouseMove}
-      onMouseEnter={() => setSpotOpacity(0.7)}
-      onMouseLeave={() => setSpotOpacity(0)}
+      // Disable hover spotlight on touch/mobile or small screens
+      onMouseEnter={() => { if (!(isTouchDevice || isSmallScreen)) setSpotOpacity(0.7); }}
+      onMouseLeave={() => { if (!(isTouchDevice || isSmallScreen)) setSpotOpacity(0); }}
       className={`relative overflow-hidden pointer-events-auto ${className}`}
     >
       {/* per-side inner glow overlays */}
@@ -119,7 +169,7 @@ const SpotlightGlow: React.FC<SpotlightGlowProps> = ({ children, className = '',
       <div
         className="pointer-events-none absolute inset-0 transition-opacity duration-150 ease-out"
         style={{
-          opacity: spotOpacity,
+          opacity: (isTouchDevice || isSmallScreen) ? 0 : spotOpacity,
           mixBlendMode: 'normal',
           // NEW: use white in dark mode, stronger neutral gray in light mode
           background: `radial-gradient(280px 280px at ${spotX}px ${spotY}px, ${isDarkMode ? 'rgba(255,255,255,0.12)' : 'rgba(107,114,128,0.22)'}, transparent 72%)`,

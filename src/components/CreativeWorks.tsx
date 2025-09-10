@@ -396,16 +396,7 @@ const CreativeWorks: React.FC = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          {/* # OLD CODE - KEEP UNTIL CONFIRMED WORKING
-          <h2 className="text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">
-            Creative Works
-          </h2>
-          <p className="text-xl text-secondary-600 dark:text-secondary-300 max-w-3xl mx-auto">
-            Explore my portfolio of projects, from web applications to design work. 
-            Each project represents a unique challenge and creative solution.
-          </p>
-          */}
-          {/* # NEW CODE - TESTING: Badge-themed container (matches About title card) */}
+          {/* Badge-themed container (matches About title card) */}
           <div className="max-w-4xl mx-auto pointer-events-auto">
             <SpotlightGlow className="bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/30 dark:border-dark-700/40 transition-all duration-300 ring-1 ring-white/40 dark:ring-white/15 hover:shadow-xl hover:bg-white/55 dark:hover:bg-dark-800/45 hover:ring-white/50 dark:hover:ring-white/20">
               <h2 className="text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">

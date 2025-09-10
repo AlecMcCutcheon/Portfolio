@@ -110,19 +110,6 @@ export const GlassCard: React.FC<GlassCardProps> = ({
       } as React.CSSProperties}
     >
       {/* Core glass surface */}
-      {/* # OLD CODE - KEEP UNTIL CONFIRMED WORKING
-      <div
-        className={cn(
-          'relative rounded-2xl',
-          'bg-white/45 dark:bg-dark-800/45',
-          'backdrop-blur-md',
-          'border border-white/30 dark:border-dark-700/40',
-          'shadow-lg transition-all duration-300',
-          'hover:shadow-xl'
-        )}
-      >
-      */}
-      {/* # NEW CODE - TESTING */}
       <div
         className={cn(
           'relative rounded-2xl',

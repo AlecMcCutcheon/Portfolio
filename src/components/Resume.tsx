@@ -35,13 +35,12 @@ const Resume: React.FC = () => {
   const experiences: Experience[] = [
     {
       id: 1,
-      // OLD CODE - KEEP UNTIL CONFIRMED WORKING
-      // title: "Tier 3 Technical Manager",
+      // title kept updated
       title: "Automation Engineer",
       subtitle: "Tier 1-3 Technical Manager & Support Technician",
       company: "One Bridge Consulting",
       location: "Monmouth, Maine, United States · Hybrid",
-      period: "Jul 2019 - 2024",
+      period: "Jul 2019 - Present",
       description: [
         "Developed and enhanced company website, boosting user experience and functionality.",
         "Automated system tasks with PowerShell, elevating performance and efficiency.",
@@ -72,7 +71,7 @@ const Resume: React.FC = () => {
       subtitle: "PowerShell and Project Consultant",
       company: "Fiverr",
       location: "Remote",
-      period: "Apr 2023 - Present",
+      period: "Apr 2023",
       description: [
         "Develop custom PowerShell scripts to automate client tasks, enhancing operational efficiency.",
         "Provide expert consulting on PowerShell projects, delivering tailored solutions to meet client needs.",
@@ -88,7 +87,7 @@ const Resume: React.FC = () => {
       subtitle: "Wix Specialist, SEO & Content Management",
       company: "Jackson RV Rental",
       location: "Remote",
-      period: "May 2024 - May 2025",
+      period: "Apr 2024 - Present",
       description: [
         "Designed and deployed a visually appealing, user-friendly website, enhancing brand messaging.",
         "Configured site with SEO best practices, ensuring high visibility and easy customer access.",
@@ -169,18 +168,12 @@ const Resume: React.FC = () => {
           transition={{ duration: 0.8 }}
           className="text-center mb-16"
         >
-          {/* # OLD CODE - KEEP UNTIL CONFIRMED WORKING
-          <h2 className="text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">Resume</h2>
-          <p className="text-xl text-secondary-600 dark:text-secondary-300 max-w-3xl mx-auto mb-8">My professional journey, education, and technical expertise.</p>
-          <button className="btn-primary flex items-center gap-2 mx-auto"><Download size={20} />Download Full Resume</button>
-          */}
+          {/* Resume header */}
           <div className="max-w-4xl mx-auto pointer-events-auto">
             <SpotlightGlow className="bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm rounded-2xl p-8 shadow-lg border border-white/30 dark:border-dark-700/40 transition-all duration-300 ring-1 ring-white/40 dark:ring-white/15 hover:shadow-xl hover:bg-white/55 dark:hover:bg-dark-800/45 hover:ring-white/50 dark:hover:ring-white/20">
               <h2 className="text-4xl md:text-5xl font-bold text-secondary-900 dark:text-white mb-4">Resume</h2>
               <p className="text-xl text-secondary-600 dark:text-secondary-300 max-w-3xl mx-auto mb-8">My professional journey, education, and technical expertise.</p>
-              {/* # OLD CODE - KEEP UNTIL CONFIRMED WORKING (dynamic generator)
-              <button id="resume-download-btn" className="...">...</button>
-              */}
+              {/* Static PDF download */}
               <a
                 href={(process.env.PUBLIC_URL || '') + '/pdfs/resume.pdf'}
                 download

@@ -51,9 +51,6 @@ const Hero: React.FC = () => {
               ].map((item) => (
                 <span
                   key={item}
-                  /* # OLD CODE - KEEP UNTIL CONFIRMED WORKING (no glow)
-                  className="inline-block text-primary-700 dark:text-primary-300 px-4 py-2 font-medium text-base bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm rounded-full shadow-lg border border-white/30 dark:border-dark-700/40 pointer-events-auto hover:shadow-xl hover:bg-white/55 dark:hover:bg-dark-800/45 transition-all duration-300"
-                  */
                   className="inline-block text-primary-700 dark:text-primary-300 px-4 py-2 font-medium text-base bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm rounded-full shadow-lg border border-white/30 dark:border-dark-700/40 pointer-events-auto hover:shadow-xl hover:bg-white/55 dark:hover:bg-dark-800/45 transition-all duration-300 ring-1 ring-white/40 dark:ring-white/15 hover:ring-white/50 dark:hover:ring-white/20"
                   style={{ minWidth: 0 }}
                 >
@@ -87,27 +84,7 @@ const Hero: React.FC = () => {
               transition={{ duration: 0.8, delay: 0.6 }}
               className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
             >
-              {/**
-               * OLD CODE - KEEP UNTIL CONFIRMED WORKING (programmatic trigger)
-               * <button
-               *   className="inline-flex items-center gap-2 text-primary-700 dark:text-primary-300 px-6 py-3 font-medium text-base shadow-md pointer-events-auto cursor-pointer hover:shadow-lg hover:scale-[1.02] bg-primary-100/50 dark:bg-primary-900/40 rounded-lg transition-all duration-300 ring-1 ring-white/40 dark:ring-white/15 hover:ring-white/50 dark:hover:ring-white/20"
-               *   style={{ minWidth: 0 }}
-               *   onClick={() => {
-               *     const btn = document.getElementById('resume-download-btn') as HTMLButtonElement | null;
-               *     if (btn) btn.click();
-               *   }}
-               *   onKeyDown={(e) => {
-               *     if (e.key === 'Enter' || e.key === ' ') {
-               *       e.preventDefault();
-               *       const btn = document.getElementById('resume-download-btn') as HTMLButtonElement | null;
-               *       if (btn) btn.click();
-               *     }
-               *   }}
-               * >
-               *   <Download size={20} />
-               *   Download Resume
-               * </button>
-               */}
+              {/* Download Resume CTA */}
               <a
                 href={(process.env.PUBLIC_URL || '') + '/pdfs/resume.pdf'}
                 download
@@ -118,9 +95,6 @@ const Hero: React.FC = () => {
                 Download Resume
               </a>
               <button
-                /* # OLD CODE - KEEP UNTIL CONFIRMED WORKING (no glow)
-                className="inline-block text-secondary-700 dark:text-secondary-300 px-6 py-3 font-medium text-base shadow-md pointer-events-auto cursor-pointer hover:shadow-lg hover:scale-[1.02] flex items-center gap-2 bg-white/50 dark:bg-dark-800/40 rounded-lg transition-all duration-300"
-                */
                 className="inline-flex items-center gap-2 text-secondary-700 dark:text-secondary-300 px-6 py-3 font-medium text-base shadow-md pointer-events-auto cursor-pointer hover:shadow-lg hover:scale-[1.02] bg-white/50 dark:bg-dark-800/40 rounded-lg transition-all duration-300 ring-1 ring-white/40 dark:ring-white/15 hover:ring-white/50 dark:hover:ring-white/20"
                 style={{ 
                   minWidth: 0,

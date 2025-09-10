@@ -61,7 +61,7 @@ const App: React.FC = () => {
               <Hero />
             </div>
             {/* Glass transition section with About anchor in the middle */}
-            <div className="relative" style={{ height: '10rem' }}>
+            <div className="relative h-16 md:h-40">
               <div id="about" style={{ position: 'absolute', top: '50%', left: 0, width: '100%', height: 0 }} />
               {ENABLE_SECTION_GLASS_OVERLAYS && (
                 <>
@@ -124,7 +124,7 @@ const App: React.FC = () => {
                 </div>
               </div>
               {/* Transition from Contact (lighter) to Footer (darker) */}
-              <div className="relative" style={{ height: '10rem' }}>
+              <div className="relative h-16 md:h-40">
                 {ENABLE_SECTION_GLASS_OVERLAYS && (
                   <>
                     <div

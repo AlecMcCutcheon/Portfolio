@@ -69,7 +69,7 @@ const Header: React.FC = () => {
           </motion.div>
 
           {/* Desktop Navigation */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden lg:flex items-center space-x-8">
             {navItems.map((item) => (
               <button
                 key={item.name}
@@ -90,7 +90,7 @@ const Header: React.FC = () => {
           </nav>
 
           {/* Mobile Menu Button */}
-          <div className="md:hidden flex items-center gap-2">
+          <div className="lg:hidden flex items-center gap-2">
             {/* Theme Toggle for Mobile */}
             <button
               onClick={toggleTheme}
@@ -114,7 +114,7 @@ const Header: React.FC = () => {
             initial={{ opacity: 0, y: -20 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -20 }}
-            className="md:hidden bg-white dark:bg-dark-900 border-t border-secondary-200 dark:border-dark-700"
+            className="lg:hidden bg-white dark:bg-dark-900 border-t border-secondary-200 dark:border-dark-700"
           >
             <div className="px-4 py-2 space-y-1">
               {navItems.map((item) => (

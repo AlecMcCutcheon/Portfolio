@@ -192,7 +192,7 @@ const Certifications: React.FC = () => {
                      />
                    </div>
                  </div>
-                 <div className="flex-1 w-full flex flex-col justify-center md:pl-2 max-w-xs">
+                 <div className="flex-1 w-full flex flex-col items-center md:items-stretch justify-center text-center md:text-left md:pl-2">
                    <div className="flex items-center justify-between mb-1">
                      <h4 className="text-lg font-bold text-secondary-900 dark:text-white">
                        {cert.name}
@@ -211,10 +211,10 @@ const Certifications: React.FC = () => {
                        {cert.credentialId}
                      </div>
                    </div>
-                   <p className="text-sm text-secondary-700 dark:text-secondary-300 mb-2 max-w-xs">
+                   <p className="text-sm text-secondary-700 dark:text-secondary-300 mb-2 max-w-xl mx-auto md:mx-0">
                      {cert.description}
                    </p>
-                   <div className="flex items-center gap-2 mt-2">
+                   <div className="flex items-center gap-2 mt-2 justify-center md:justify-start">
                     <span className="px-3 py-1 rounded-full text-sm font-medium capitalize w-fit text-primary-700 dark:text-primary-300 bg-primary-100/70 dark:bg-primary-900/50 backdrop-blur-sm border border-white/30 dark:border-dark-700/40 ring-1 ring-white/40 dark:ring-white/15">
                        {cert.category}
                      </span>
@@ -246,16 +246,22 @@ const Certifications: React.FC = () => {
           <h3 className="text-2xl font-bold text-secondary-900 dark:text-white text-center mb-8">
             Achievements & Certificates
           </h3>
-          <div className="flex flex-wrap justify-center gap-6">
-            {achievements.map((cert, index) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+            {achievements.map((cert, index) => {
+              const isLastOdd = index === achievements.length - 1 && (achievements.length % 2 === 1);
+              return (
               <motion.div
                 key={cert.id}
                 initial={{ opacity: 0, y: 30 }}
                 animate={inView ? { opacity: 1, y: 0 } : {}}
                 transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
-                className="pointer-events-auto"
+                className={`pointer-events-auto w-full ${isLastOdd ? 'sm:col-span-2 sm:max-w-xl sm:mx-auto' : ''}`}
               >
+                {/* OLD CODE - KEEP UNTIL CONFIRMED WORKING
                 <SpotlightGlow className="rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300 w-80 bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm border border-white/30 dark:border-dark-700/40 ring-1 ring-white/40 dark:ring-white/15 hover:ring-white/50 dark:hover:ring-white/20">
+                */}
+                {/* NEW CODE - TESTING: full width on mobile, fixed width on larger screens */}
+                <SpotlightGlow className="rounded-lg p-6 shadow-lg hover:shadow-xl transition-all duration-300 w-full bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm border border-white/30 dark:border-dark-700/40 ring-1 ring-white/40 dark:ring-white/15 hover:ring-white/50 dark:hover:ring-white/20">
                 <div className="flex items-center mb-4">
                   <div className="w-10 h-10 rounded-lg flex items-center justify-center bg-white/60 dark:bg-dark-800/50 backdrop-blur-sm border border-white/30 dark:border-dark-700/40 ring-1 ring-white/40 dark:ring-white/15">
                     <Award className="w-5 h-5 text-secondary-600 dark:text-secondary-400" />
@@ -279,7 +285,7 @@ const Certifications: React.FC = () => {
                 </span>
                 </SpotlightGlow>
               </motion.div>
-            ))}
+            );})}
           </div>
         </motion.div>
       </div>
