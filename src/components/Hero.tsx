@@ -15,7 +15,8 @@ const Hero: React.FC = () => {
 
   return (
     <>
-      <GlassDebugSample />
+      {/* GlassDebugSample disabled for performance */}
+      {/* <GlassDebugSample /> */}
       <section id="home" className="min-h-screen flex items-center justify-center relative pt-32 overflow-hidden">
         <div className="container-max section-padding relative z-10">
           <div className="text-center max-w-4xl mx-auto">

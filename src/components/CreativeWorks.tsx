@@ -251,10 +251,10 @@ const CreativeWorks: React.FC = () => {
           {
             id: 9991,
             title: "One Bridge Consulting",
-            description: (await fetchSocialData("https://www.onebridgeconsulting.net/")).description,
-            image: (await fetchSocialData("https://www.onebridgeconsulting.net/")).image,
+            description: "Managed IT and consulting in Central Maine—security & compliance, automation, device and app management, cloud migration, and proactive support. My role: end‑to‑end site setup, Wix web design, structure, and SEO improvements.",
+            image: generateProceduralImage(stableStringify({ url: 'https://www.onebridgeconsulting.net/', title: 'One Bridge Consulting' })),
             category: "design" as const,
-            technologies: ["Web Design", "Business", "Consulting"],
+            technologies: ["Wix", "Web Design", "Business", "Consulting"],
             liveUrl: "https://www.onebridgeconsulting.net/",
             githubUrl: "#",
             featured: false,
@@ -265,16 +265,30 @@ const CreativeWorks: React.FC = () => {
           {
             id: 9992,
             title: "Jackson RV Rental",
-            description: (await fetchSocialData("https://www.jacksonrvrental.com/")).description,
-            image: (await fetchSocialData("https://www.jacksonrvrental.com/")).image,
+            description: "RV rentals in Anson, ME—quality RVs, 24/7 assistance, expert trip advice, transparent pricing, and a simple reserve‑plan‑go flow. My role: full Wix site build, design, SEO, plus backend support for a custom reservations system.",
+            image: generateProceduralImage(stableStringify({ url: 'https://www.jacksonrvrental.com/', title: 'Jackson RV Rental' })),
             category: "design" as const,
-            technologies: ["Web Design", "Rental", "RV"],
+            technologies: ["Wix", "Web Design", "Backend", "Custom Reservations", "Rental", "RV"],
             liveUrl: "https://www.jacksonrvrental.com/",
             githubUrl: "#",
             featured: false,
             stars: 0,
             updatedAt: "2024-01-01T00:00:00Z",
             seed: stableStringify({ url: 'https://www.jacksonrvrental.com/', title: 'Jackson RV Rental' })
+          },
+          {
+            id: 9993,
+            title: "Tidewater O.P.E.N. Speedtest",
+            description: "Custom‑branded speed test for Tidewater based on OpenSpeedTest—an HTML5, no‑plugins network speed test designed to replicate real‑world speeds across devices. My role: UI customization and deployment as a static web app. Learn more: openspeedtest.com",
+            image: generateProceduralImage(stableStringify({ url: 'https://speedtest.tidewater.net/', title: 'Tidewater O.P.E.N. Speedtest' })),
+            category: "design" as const,
+            technologies: ["HTML/CSS", "OpenSpeedTest", "UI Customization", "Web App"],
+            liveUrl: "https://speedtest.tidewater.net/",
+            githubUrl: "#",
+            featured: false,
+            stars: 0,
+            updatedAt: "2024-01-01T00:00:00Z",
+            seed: stableStringify({ url: 'https://speedtest.tidewater.net/', title: 'Tidewater O.P.E.N. Speedtest' })
           }
         ];
 
@@ -324,10 +338,10 @@ const CreativeWorks: React.FC = () => {
           {
             id: 4,
             title: "One Bridge Consulting",
-            description: (await fetchSocialData("https://www.onebridgeconsulting.net/")).description,
-            image: (await fetchSocialData("https://www.onebridgeconsulting.net/")).image,
+            description: "Managed IT and consulting in Central Maine—security & compliance, automation, device and app management, cloud migration, and proactive support. My role: end‑to‑end site setup, Wix web design, structure, and SEO improvements.",
+            image: generateProceduralImage(stableStringify({ url: 'https://www.onebridgeconsulting.net/', title: 'One Bridge Consulting' })),
             category: "design",
-            technologies: ["Web Design", "Business", "Consulting"],
+            technologies: ["Wix", "Web Design", "Business", "Consulting"],
             liveUrl: "https://www.onebridgeconsulting.net/",
             githubUrl: "#",
             featured: false,
@@ -337,11 +351,24 @@ const CreativeWorks: React.FC = () => {
           {
             id: 5,
             title: "Jackson RV Rental",
-            description: (await fetchSocialData("https://www.jacksonrvrental.com/")).description,
-            image: (await fetchSocialData("https://www.jacksonrvrental.com/")).image,
+            description: "RV rentals in Anson, ME—quality RVs, 24/7 assistance, expert trip advice, transparent pricing, and a simple reserve‑plan‑go flow. My role: full Wix site build, design, SEO, plus backend support for a custom reservations system.",
+            image: generateProceduralImage(stableStringify({ url: 'https://www.jacksonrvrental.com/', title: 'Jackson RV Rental' })),
             category: "design",
-            technologies: ["Web Design", "Rental", "RV"],
+            technologies: ["Wix", "Web Design", "Backend", "Custom Reservations", "Rental", "RV"],
             liveUrl: "https://www.jacksonrvrental.com/",
+            githubUrl: "#",
+            featured: false,
+            stars: 0,
+            updatedAt: "2024-01-01T00:00:00Z"
+          },
+          {
+            id: 6,
+            title: "Tidewater O.P.E.N. Speedtest",
+            description: "Custom‑branded speed test for Tidewater based on OpenSpeedTest—an HTML5, no‑plugins network speed test designed to replicate real‑world speeds across devices. My role: UI customization and deployment as a static web app. Learn more: openspeedtest.com",
+            image: generateProceduralImage(stableStringify({ url: 'https://speedtest.tidewater.net/', title: 'Tidewater O.P.E.N. Speedtest' })),
+            category: "design",
+            technologies: ["HTML/CSS", "OpenSpeedTest", "UI Customization", "Web App"],
+            liveUrl: "https://speedtest.tidewater.net/",
             githubUrl: "#",
             featured: false,
             stars: 0,
@@ -452,9 +479,7 @@ const CreativeWorks: React.FC = () => {
                   <img
                     src={project.githubUrl !== '#' ? generateProceduralImage(project.seed || (project.title + '|' + project.description)) : project.image}
                     alt={project.title}
-                    className={`w-full h-full transition-transform duration-300 hover:scale-110 ${
-                      project.category === 'design' ? 'object-contain' : 'object-cover'
-                    }`}
+                    className={`w-full h-full transition-transform duration-300 hover:scale-110 object-cover`}
                   />
                   {project.featured && project.category !== 'design' && (
                     <>

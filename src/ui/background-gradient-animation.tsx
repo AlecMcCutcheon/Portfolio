@@ -399,8 +399,11 @@ export const BackgroundGradientAnimation = ({
     ];
   };
 
-  // Animation loop for smooth color interpolation
+  // Animation loop for smooth color interpolation (disabled when pointer blobs are off)
   useEffect(() => {
+    if (!ENABLE_POINTER_BLOBS) {
+      return;
+    }
     let running = true;
     function animate() {
       setDynamicPointerColor(prev => {
@@ -518,7 +521,7 @@ export const BackgroundGradientAnimation = ({
     };
   }, [targetPointerColor, tgX, tgY]);
 
-  // Global mousemove handler for robust tracking
+  // Global mousemove handler for robust tracking (only when pointer blobs enabled)
   useEffect(() => {
     function handleMouseMove(event: MouseEvent) {
       if (!containerRef.current) return;
@@ -533,7 +536,7 @@ export const BackgroundGradientAnimation = ({
       const contrastingColor = selectContrastingColor(relativeX, relativeY);
       setTargetPointerColor(contrastingColor);
     }
-    if (interactive) {
+    if (interactive && ENABLE_POINTER_BLOBS) {
       window.addEventListener('mousemove', handleMouseMove);
     }
     return () => {
@@ -601,8 +604,8 @@ export const BackgroundGradientAnimation = ({
     setIsSafari(/^((?!chrome|android).)*safari/i.test(navigator.userAgent));
   }, []);
 
-  // Set to false to disable mouse-following blobs
-  const ENABLE_POINTER_BLOBS = !(isTouch || isSmallScreen); // disable pointer-following blobs on touch-only or small screens
+  // Set to false to disable mouse-following blobs entirely
+  const ENABLE_POINTER_BLOBS = false;
 
   // Helper: normalize a point to [0,1] within the container
   function normalizeToContainer(x: number, y: number): { normalizedX: number; normalizedY: number } {

@@ -63,7 +63,7 @@ const Certifications: React.FC = () => {
       issuer: "Central Maine Community College",
       date: "Jan 2022",
       credentialId: "COMP001021438205",
-      image: comptiaImage || "https://images.credly.com/images/0afe650b-5181-470f-af84-fe9f88c23918/CompTIA-A-plus-ce-certification.png",
+      image: comptiaImage || (process.env.PUBLIC_URL || '') + "/images/CompTIA_badge.png",
       url: "https://www.credly.com/badges/0afe650b-5181-470f-af84-fe9f88c23918/linked_in",
       category: "Professional",
       featured: true,
@@ -189,6 +189,7 @@ const Certifications: React.FC = () => {
                        src={cert.image}
                        alt={cert.name + ' badge'}
                        className="w-36 h-36 object-cover"
+                       referrerPolicy="no-referrer"
                      />
                    </div>
                  </div>

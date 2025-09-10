@@ -231,7 +231,7 @@ const Contact: React.FC = () => {
                     value={formData.name}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-white/30 dark:border-dark-700/40 bg-white/70 dark:bg-dark-800/60 backdrop-blur-sm text-secondary-900 dark:text-white rounded-lg ring-1 ring-white/40 dark:ring-white/15 shadow-sm hover:ring-white/50 focus:ring-2 focus:ring-primary-400 focus:border-transparent focus:shadow-md transition-all duration-200"
+                    className="w-full px-4 py-3 border border-white/30 dark:border-dark-700/40 bg-white/80 dark:bg-dark-800/60 backdrop-blur-sm text-secondary-900 dark:text-white rounded-lg ring-1 ring-white/40 dark:ring-white/15 shadow-md hover:shadow-lg hover:ring-white/50 focus:ring-2 focus:ring-primary-400 focus:border-transparent focus:shadow-lg transition-all duration-200"
                     placeholder="Your name"
                   />
                 </div>
@@ -246,7 +246,7 @@ const Contact: React.FC = () => {
                     value={formData.email}
                     onChange={handleInputChange}
                     required
-                    className="w-full px-4 py-3 border border-white/30 dark:border-dark-700/40 bg-white/70 dark:bg-dark-800/60 backdrop-blur-sm text-secondary-900 dark:text-white rounded-lg ring-1 ring-white/40 dark:ring-white/15 shadow-sm hover:ring-white/50 focus:ring-2 focus:ring-primary-400 focus:border-transparent focus:shadow-md transition-all duration-200"
+                    className="w-full px-4 py-3 border border-white/30 dark:border-dark-700/40 bg-white/80 dark:bg-dark-800/60 backdrop-blur-sm text-secondary-900 dark:text-white rounded-lg ring-1 ring-white/40 dark:ring-white/15 shadow-md hover:shadow-lg hover:ring-white/50 focus:ring-2 focus:ring-primary-400 focus:border-transparent focus:shadow-lg transition-all duration-200"
                     placeholder="your.email@example.com"
                   />
                 </div>
@@ -263,7 +263,7 @@ const Contact: React.FC = () => {
                   value={formData.subject}
                   onChange={handleInputChange}
                   required
-                  className="w-full px-4 py-3 border border-white/30 dark:border-dark-700/40 bg-white/70 dark:bg-dark-800/60 backdrop-blur-sm text-secondary-900 dark:text-white rounded-lg ring-1 ring-white/40 dark:ring-white/15 shadow-sm hover:ring-white/50 focus:ring-2 focus:ring-primary-400 focus:border-transparent focus:shadow-md transition-all duration-200"
+                  className="w-full px-4 py-3 border border-white/30 dark:border-dark-700/40 bg-white/80 dark:bg-dark-800/60 backdrop-blur-sm text-secondary-900 dark:text-white rounded-lg ring-1 ring-white/40 dark:ring-white/15 shadow-md hover:shadow-lg hover:ring-white/50 focus:ring-2 focus:ring-primary-400 focus:border-transparent focus:shadow-lg transition-all duration-200"
                   placeholder="What's this about?"
                 />
               </div>
@@ -279,7 +279,7 @@ const Contact: React.FC = () => {
                   onChange={handleInputChange}
                   required
                   rows={6}
-                  className="w-full px-4 py-3 border border-white/30 dark:border-dark-700/40 bg-white/70 dark:bg-dark-800/60 backdrop-blur-sm text-secondary-900 dark:text-white rounded-lg ring-1 ring-white/40 dark:ring-white/15 shadow-sm hover:ring-white/50 focus:ring-2 focus:ring-primary-400 focus:border-transparent focus:shadow-md transition-all duration-200 resize-none"
+                  className="w-full px-4 py-3 border border-white/30 dark:border-dark-700/40 bg-white/80 dark:bg-dark-800/60 backdrop-blur-sm text-secondary-900 dark:text-white rounded-lg ring-1 ring-white/40 dark:ring-white/15 shadow-md hover:shadow-lg hover:ring-white/50 focus:ring-2 focus:ring-primary-400 focus:border-transparent focus:shadow-lg transition-all duration-200 resize-none"
                   placeholder="Tell me about your project or opportunity..."
                 />
               </div>

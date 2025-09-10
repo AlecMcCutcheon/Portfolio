@@ -10,6 +10,7 @@ import Resume from './components/Resume';
 import Contact from './components/Contact';
 import Footer from './components/Footer';
 import { BackgroundGradientAnimation } from './ui/background-gradient-animation';
+import SectionDivider from './ui/SectionDivider';
 
 const ENABLE_SECTION_GLASS_OVERLAYS = true;
 
@@ -67,7 +68,7 @@ const App: React.FC = () => {
                 <>
                   <div className="absolute inset-0 z-0 pointer-events-none h-full backdrop-blur-sm dark:hidden"
                     style={{
-                      background: 'linear-gradient(to bottom, rgba(243,244,246,0.70) 0%, rgba(255,255,255,0.70) 100%)'
+                      background: 'linear-gradient(to bottom, rgba(243,244,246,0.70) 0%, rgba(255,255,255,0.80) 100%)'
                     }}
                   />
                   <div
@@ -82,44 +83,60 @@ const App: React.FC = () => {
             {/* About Section */}
             <div className="relative" style={{ minHeight: '80vh' }}>
               {ENABLE_SECTION_GLASS_OVERLAYS && (
-                <div className="absolute inset-0 z-0 pointer-events-none bg-white/70 dark:bg-dark-800/70 backdrop-blur-lg" />
+                <div className="absolute inset-0 z-0 pointer-events-none bg-white/80 dark:bg-dark-800/70 backdrop-blur-lg" />
               )}
               <About />
             </div>
             {/* Creative Works Section (inside shared gradient wrapper) */}
             <div className="relative">
               {ENABLE_SECTION_GLASS_OVERLAYS && (
-                <div className="absolute inset-0 z-0 pointer-events-none bg-white/70 dark:bg-dark-800/70 backdrop-blur-lg" />
+                <div className="absolute inset-0 z-0 pointer-events-none bg-white/80 dark:bg-dark-800/70 backdrop-blur-lg" />
               )}
-              <CreativeWorks />
+              <div className="relative z-10 pointer-events-none">
+                {/* Divider between About and Creative Works */}
+                <SectionDivider />
+                <CreativeWorks />
+              </div>
             </div>
 
             {/* Certifications Section (inside shared gradient wrapper) */}
             <div className="relative">
               {ENABLE_SECTION_GLASS_OVERLAYS && (
-                <div className="absolute inset-0 z-0 pointer-events-none bg-white/70 dark:bg-dark-800/70 backdrop-blur-lg" />
+                <div className="absolute inset-0 z-0 pointer-events-none bg-white/80 dark:bg-dark-800/70 backdrop-blur-lg" />
               )}
-              <Certifications />
+              <div className="relative z-10 pointer-events-none">
+                {/* Divider between Creative Works and Certifications */}
+                <SectionDivider />
+                <Certifications />
+              </div>
             </div>
 
-            {/* Removed transition: Certifications and Resume share identical overlay tint */}
+            {/* Divider between Certifications and Resume (sits at top of Resume) */}
 
             {/* Resume Section (inside shared gradient wrapper) */}
             <div className="relative">
               {ENABLE_SECTION_GLASS_OVERLAYS && (
-                <div className="absolute inset-0 z-0 pointer-events-none bg-white/70 dark:bg-dark-800/70 backdrop-blur-lg" />
+                <div className="absolute inset-0 z-0 pointer-events-none bg-white/80 dark:bg-dark-800/70 backdrop-blur-lg" />
               )}
-              <Resume />
+              <div className="relative z-10 pointer-events-none">
+                {/* Divider between Certifications and Resume */}
+                <SectionDivider />
+                <Resume />
+              </div>
             </div>
+
+            {/* Themed divider rendered inside the next section (no overlay gap) */}
 
             {/* Contact + Footer Section (inside shared gradient wrapper) */}
             <div className="relative">
               {/* Contact with uniform (About/Certs) overlay tint */}
               <div className="relative">
                 {ENABLE_SECTION_GLASS_OVERLAYS && (
-                  <div className="absolute inset-0 z-0 pointer-events-none bg-white/70 dark:bg-dark-800/70 backdrop-blur-lg" />
+                  <div className="absolute inset-0 z-0 pointer-events-none bg-white/80 dark:bg-dark-800/70 backdrop-blur-lg" />
                 )}
                 <div className="relative z-10 pointer-events-none">
+                  {/* Inline themed divider at the top of Get In Touch (inside overlay) */}
+                  <SectionDivider />
                   <Contact />
                 </div>
               </div>
@@ -130,7 +147,7 @@ const App: React.FC = () => {
                     <div
                       className="absolute inset-0 z-0 pointer-events-none h-full backdrop-blur-sm dark:hidden"
                       style={{
-                        background: 'linear-gradient(to bottom, rgba(255,255,255,0.70) 0%, rgba(226,232,240,0.75) 100%)',
+                        background: 'linear-gradient(to bottom, rgba(255,255,255,0.80) 0%, rgba(226,232,240,0.75) 100%)',
                       }}
                     />
                     <div
