@@ -1,0 +1,99 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  body {
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.6;
+    @apply bg-white dark:bg-dark-950 text-secondary-900 dark:text-white transition-colors duration-300;
+  }
+
+  /* Default to dark mode */
+  :root {
+    color-scheme: dark;
+  }
+}
+
+@layer components {
+  .section-padding {
+    @apply py-16 px-4 sm:px-6 lg:px-8;
+  }
+  
+  .container-max {
+    @apply max-w-7xl mx-auto;
+  }
+  
+  .gradient-text {
+    @apply bg-gradient-to-r from-primary-600 to-primary-400 bg-clip-text text-transparent;
+  }
+  
+  .card-hover {
+    @apply transition-all duration-300 hover:shadow-lg hover:-translate-y-1 dark:hover:shadow-primary-500/10;
+  }
+  
+  .btn-primary {
+    @apply bg-primary-600 hover:bg-primary-700 text-white font-medium py-3 px-6 rounded-lg transition-colors duration-200;
+  }
+
+  .card-bg {
+    @apply bg-white dark:bg-dark-900 border border-secondary-200 dark:border-dark-700;
+  }
+
+  .text-primary {
+    @apply text-secondary-900 dark:text-white;
+  }
+
+  .text-secondary {
+    @apply text-secondary-600 dark:text-secondary-300;
+  }
+
+  .bg-section {
+    @apply bg-secondary-50 dark:bg-dark-900;
+  }
+
+  .bg-card {
+    @apply bg-white dark:bg-dark-800;
+  }
+
+  .glass-card {
+    @apply bg-white/40 dark:bg-dark-800/40 backdrop-blur border border-white/30 dark:border-dark-700/40 shadow-lg rounded-xl;
+  }
+  
+  .glass-card-opaque {
+    @apply bg-white/70 dark:bg-dark-800/70 backdrop-blur-sm border border-white/30 dark:border-dark-700/40 shadow-xl rounded-xl;
+  }
+} 
+
+@keyframes float-slow {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-30px) scale(1.05); }
+}
+@keyframes float-medium {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-60px) scale(1.1); }
+}
+@keyframes float-fast {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-90px) scale(1.15); }
+}
+.animate-float-slow { animation: float-slow 18s ease-in-out infinite alternate; }
+.animate-float-medium { animation: float-medium 14s ease-in-out infinite alternate; }
+.animate-float-fast { animation: float-fast 10s ease-in-out infinite alternate; } 
+
+@keyframes gloss-shine {
+  0% { left: -60%; opacity: 0; }
+  20% { opacity: 0.8; }
+  50% { left: 100%; opacity: 0.8; }
+  100% { left: 100%; opacity: 0; }
+}
+.animate-gloss-shine {
+  animation: gloss-shine 1.2s cubic-bezier(0.4,0,0.2,1) 1;
+}
+
+ 
+ 
