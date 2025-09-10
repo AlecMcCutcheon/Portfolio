@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Award, Calendar, ExternalLink, CheckCircle } from 'lucide-react';
@@ -16,44 +16,10 @@ interface Certification {
   featured: boolean;
 }
 
-// Add fetchSocialData function (copied from CreativeWorks)
-const fetchSocialData = async (url: string): Promise<{image: string, description: string}> => {
-  try {
-    const apiUrl = `https://api.microlink.io?url=${encodeURIComponent(url)}&meta=true`;
-    const response = await fetch(apiUrl);
-    const data = await response.json();
-    let image = '';
-    let description = '';
-    if (data.status === 'success' && data.data) {
-      if (data.data.image && data.data.image.url) {
-        image = data.data.image.url;
-      } else if (data.data.logo && data.data.logo.url) {
-        image = data.data.logo.url;
-      }
-      if (data.data.description) {
-        description = data.data.description;
-      } else if (data.data.title) {
-        description = data.data.title;
-      }
-    }
-    return { image, description };
-  } catch (error) {
-    return { image: '', description: '' };
-  }
-};
+// Removed external badge fetching to avoid rate limits on static hosting
 
 const Certifications: React.FC = () => {
   const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.01 });
-  // State for CompTIA badge image
-  const [comptiaImage, setComptiaImage] = useState<string>("");
-
-  useEffect(() => {
-    const fetchBadge = async () => {
-      const { image } = await fetchSocialData("https://www.credly.com/badges/0afe650b-5181-470f-af84-fe9f88c23918/linked_in");
-      if (image) setComptiaImage(image);
-    };
-    fetchBadge();
-  }, []);
 
   // Split certifications into professional and achievements
   const professionalCerts = [
@@ -63,7 +29,7 @@ const Certifications: React.FC = () => {
       issuer: "Central Maine Community College",
       date: "Jan 2022",
       credentialId: "COMP001021438205",
-      image: comptiaImage || (process.env.PUBLIC_URL || '') + "/images/CompTIA_badge.png",
+      image: (process.env.PUBLIC_URL || '') + "/images/CompTIA_badge.png",
       url: "https://www.credly.com/badges/0afe650b-5181-470f-af84-fe9f88c23918/linked_in",
       category: "Professional",
       featured: true,
