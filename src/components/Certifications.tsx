@@ -1,29 +1,18 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { Award, Calendar, ExternalLink, CheckCircle } from 'lucide-react';
+import { Award, Calendar, CheckCircle } from 'lucide-react';
 import { useDirectionalAnimation } from '../hooks/useDirectionalAnimation';
 // Use global SpotlightGlow to prevent duplication across chunks
 const SpotlightGlow = (window as any).SpotlightGlow;
 
-interface Certification {
-  id: number;
-  name: string;
-  issuer: string;
-  date: string;
-  credentialId: string;
-  image: string;
-  url?: string;
-  category: 'development' | 'design' | 'cloud' | 'other';
-  featured: boolean;
-}
 
 // Removed external badge fetching to avoid rate limits on static hosting
 
 const Certifications: React.FC = () => {
   const { getDirectionalVariants, getStaggeredDirectionalVariants } = useDirectionalAnimation();
   
-  const [ref, inView] = useInView({ 
+  const [ref] = useInView({ 
     triggerOnce: false, 
     threshold: 0.1,
     rootMargin: '50px 0px'
@@ -99,12 +88,6 @@ const Certifications: React.FC = () => {
       category: "Achievement",
       description: "Completion of workplace safety training, including ergonomics and safe equipment use."
     }
-  ];
-
-  const categories = [
-    { id: 'all', label: 'All Certifications', count: professionalCerts.length + achievements.length },
-    { id: 'professional', label: 'Professional Certifications', count: professionalCerts.length },
-    { id: 'achievement', label: 'Achievements & Certificates', count: achievements.length },
   ];
 
   return (
