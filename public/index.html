@@ -117,6 +117,30 @@
       }
     </script>
     
+    <!-- Error Handling for MIME Type Issues -->
+    <script type="text/javascript">
+      // Global error handler for script loading issues
+      window.addEventListener('error', function(event) {
+        if (event.target && event.target.tagName === 'SCRIPT') {
+          const src = event.target.src;
+          if (src && (src.includes('google-analytics') || src.includes('gtag'))) {
+            console.warn('Script loading error detected and handled:', src);
+            event.preventDefault();
+            return false;
+          }
+        }
+      }, true);
+      
+      // Handle unhandled promise rejections that might cause MIME type errors
+      window.addEventListener('unhandledrejection', function(event) {
+        if (event.reason && event.reason.message && 
+            event.reason.message.includes('MIME type')) {
+          console.warn('MIME type error handled:', event.reason.message);
+          event.preventDefault();
+        }
+      });
+    </script>
+    
     <!-- Google Fonts - Ultra-optimized loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
