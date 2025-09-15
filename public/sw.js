@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'portfolio-v3';
+const CACHE_VERSION = 'portfolio-v4';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;
@@ -74,51 +74,68 @@ self.addEventListener('fetch', (event) => {
   // Determine cache strategy based on request type
   if (url.pathname.includes('/api/') || url.hostname === 'api.github.com' || url.hostname === 'api.emailjs.com') {
     event.respondWith(networkFirst(request, DYNAMIC_CACHE));
-  } else if (url.pathname.match(/\.(webp|svg)$/)) {
+  } else if (url.pathname.match(/\.(webp|svg|png|jpg|jpeg|gif|ico)$/)) {
+    // Images get aggressive caching
     event.respondWith(cacheFirst(request, IMAGE_CACHE));
-  } else if (url.pathname.endsWith('.html') || url.pathname === '/') {
-    event.respondWith(staleWhileRevalidate(request, STATIC_CACHE));
-  } else if (url.pathname.match(/\.(js|css|woff|woff2|ttf|eot)$/)) {
+  } else if (url.pathname.match(/\.(js|css|woff|woff2|ttf|eot|pdf)$/)) {
+    // Static assets get aggressive caching
     event.respondWith(cacheFirst(request, STATIC_CACHE));
+  } else if (url.pathname.endsWith('.html') || url.pathname === '/') {
+    // HTML gets stale-while-revalidate
+    event.respondWith(staleWhileRevalidate(request, STATIC_CACHE));
   } else {
     event.respondWith(networkFirst(request, DYNAMIC_CACHE));
   }
 });
 
-// Cache-first strategy with extended cache lifetime
+// Aggressive cache-first strategy with long-term caching
 async function cacheFirst(request, cacheName) {
   try {
     const cache = await caches.open(cacheName);
     const cached = await cache.match(request);
     
     if (cached) {
-      // Add cache control headers for better caching
-      const response = new Response(cached.body, {
+      // Return cached version with long cache headers
+      return new Response(cached.body, {
         status: cached.status,
         statusText: cached.statusText,
         headers: {
-          ...cached.headers,
+          'Content-Type': cached.headers.get('Content-Type') || 'application/octet-stream',
           'Cache-Control': 'public, max-age=31536000, immutable',
-          'Expires': new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString()
+          'Expires': new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString(),
+          'Last-Modified': new Date().toUTCString(),
+          'ETag': `"${Date.now()}"`
         }
       });
-      return response;
     }
     
     const networkResponse = await fetch(request);
     if (networkResponse.ok) {
-      // Clone response with extended cache headers
+      // Cache the response with long-term headers
       const responseToCache = new Response(networkResponse.body, {
         status: networkResponse.status,
         statusText: networkResponse.statusText,
         headers: {
-          ...networkResponse.headers,
+          'Content-Type': networkResponse.headers.get('Content-Type') || 'application/octet-stream',
+          'Cache-Control': 'public, max-age=31536000, immutable',
+          'Expires': new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString(),
+          'Last-Modified': new Date().toUTCString(),
+          'ETag': `"${Date.now()}"`
+        }
+      });
+      
+      cache.put(request, responseToCache.clone());
+      
+      // Return the cached version to ensure consistent headers
+      return new Response(networkResponse.body, {
+        status: networkResponse.status,
+        statusText: networkResponse.statusText,
+        headers: {
+          'Content-Type': networkResponse.headers.get('Content-Type') || 'application/octet-stream',
           'Cache-Control': 'public, max-age=31536000, immutable',
           'Expires': new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString()
         }
       });
-      cache.put(request, responseToCache.clone());
-      return networkResponse;
     }
     return networkResponse;
   } catch (error) {
