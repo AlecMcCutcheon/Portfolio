@@ -51,8 +51,10 @@ const App: React.FC = () => {
       // Yield again
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      // Register service worker - FIXED WITH GITHUB PAGES PATH CORRECTIONS
-      if ('serviceWorker' in navigator) {
+      // Register service worker - ONLY IN PRODUCTION (GitHub Pages)
+      const isDevelopment = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+      
+      if ('serviceWorker' in navigator && !isDevelopment) {
         window.addEventListener('load', () => {
           navigator.serviceWorker.register('/sw.js')
             .then((registration) => {
@@ -62,6 +64,8 @@ const App: React.FC = () => {
               console.warn('Service worker registration failed:', registrationError);
             });
         });
+      } else if (isDevelopment) {
+        console.log('Service worker disabled in development environment');
       }
     };
 
