@@ -67,6 +67,9 @@ self.addEventListener('fetch', (event) => {
 
   // Skip Chrome extensions and other non-http requests
   if (!url.protocol.startsWith('http')) return;
+  
+  // Skip preconnect requests to allow them to work properly
+  if (request.headers.get('purpose') === 'preconnect') return;
 
   // Determine cache strategy based on request type
   if (url.pathname.includes('/api/') || url.hostname === 'api.github.com' || url.hostname === 'api.emailjs.com') {
