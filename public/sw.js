@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-const CACHE_VERSION = 'portfolio-v12';
+const CACHE_VERSION = 'portfolio-v13';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;
@@ -83,10 +83,11 @@ self.addEventListener('fetch', (event) => {
 async function handleRequest(request) {
   const url = new URL(request.url);
   
-  // Special handling for main bundle to force network request and cache bust
-  if (url.pathname.includes('/static/js/main.') || url.pathname.includes('/static/css/main.')) {
-    console.log('Force network request for main bundle:', request.url);
-    return networkFirstWithHeaders(request, STATIC_CACHE);
+  // Special handling for main bundle and all static assets to force proper cache headers
+  if (url.pathname.includes('/static/js/') || url.pathname.includes('/static/css/') || 
+      url.pathname.includes('/static/js/main.') || url.pathname.includes('/static/css/main.')) {
+    console.log('Force proper cache headers for static asset:', request.url);
+    return cacheFirstWithHeaders(request, STATIC_CACHE);
   }
   
   // Determine cache strategy based on request type
@@ -204,7 +205,7 @@ async function cacheFirstWithHeaders(request, cacheName) {
       
       console.log('Enhanced response headers:', Object.fromEntries(enhancedResponse.headers.entries()));
       
-      // Cache the enhanced response
+      // Cache the enhanced response immediately for future requests
       cache.put(request, enhancedResponse.clone());
       return enhancedResponse;
     }
