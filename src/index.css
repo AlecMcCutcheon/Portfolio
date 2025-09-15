@@ -10,35 +10,6 @@
   transform: translateZ(0);
 }
 
-/* Comprehensive layout shift prevention */
-* {
-  box-sizing: border-box;
-}
-
-/* Prevent layout shifts from images */
-img {
-  height: auto;
-  max-width: 100%;
-}
-
-/* Prevent layout shifts from text content */
-h1, h2, h3, h4, h5, h6, p {
-  contain: layout style;
-}
-
-/* Prevent layout shifts from containers */
-section, div, main, article {
-  contain: layout style;
-}
-
-/* Prevent layout shifts from animations */
-.animate-first, .animate-second, .animate-third, .animate-fourth, .animate-fifth {
-  contain: layout style paint;
-  will-change: transform, opacity;
-  backface-visibility: hidden;
-  transform: translateZ(0);
-}
-
 @layer base {
   html {
     scroll-behavior: smooth;

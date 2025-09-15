@@ -147,11 +147,6 @@
         color: #f8fafc; 
         margin: 0; 
         padding: 0;
-        font-display: swap;
-        /* Prevent layout shifts from font loading */
-        font-size-adjust: 0.5;
-        text-rendering: optimizeLegibility;
-        contain: layout style;
       }
       #root { min-height: 100vh; }
       /* Prevent flash of unstyled content */
@@ -252,30 +247,11 @@
       /* Prevent layout shifts in hero container */
       .hero-section {
         min-height: 80vh;
-        contain: layout style paint;
+        contain: layout style;
       }
       
       .container-max {
-        contain: layout style paint;
-      }
-      
-      /* Additional layout shift prevention */
-      .gradients-container {
-        contain: layout style paint;
-      }
-      
-      .section-padding {
         contain: layout style;
-      }
-      
-      /* Prevent shifts from text elements */
-      .hero-title, .hero-description {
-        contain: layout style;
-      }
-      
-      /* Prevent shifts from profile image */
-      .profile-image {
-        contain: layout style paint;
       }
       .hero-subtitle { 
         font-size: clamp(1rem, 2.5vw, 1.25rem); 
