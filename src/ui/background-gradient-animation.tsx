@@ -40,16 +40,26 @@ export const BackgroundGradientAnimation = ({
   const containerRef = useRef<HTMLDivElement>(null);
   const { shouldDisableAnimations, shouldReduceEffects } = useMobileDetection();
   const containerRectRef = useRef<DOMRect | null>(null);
-  // Update rect on mount and resize
+  // Update rect on mount and resize with throttling
   useEffect(() => {
+    let resizeTimeout: NodeJS.Timeout;
     function updateRect() {
       if (containerRef.current) {
         containerRectRef.current = containerRef.current.getBoundingClientRect();
       }
     }
     updateRect();
-    window.addEventListener('resize', updateRect);
-    return () => window.removeEventListener('resize', updateRect);
+    
+    function throttledUpdateRect() {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(updateRect, 100); // Throttle to 10fps max
+    }
+    
+    window.addEventListener('resize', throttledUpdateRect);
+    return () => {
+      window.removeEventListener('resize', throttledUpdateRect);
+      clearTimeout(resizeTimeout);
+    };
   }, []);
   const [curX, setCurX] = useState(0);
   const [curY, setCurY] = useState(0);
@@ -234,8 +244,11 @@ export const BackgroundGradientAnimation = ({
     // For debug: store the last sampled coordinate
     lastSampledCoord = { x, y };
     setDebugSample({ x, y });
-    const rect = containerRef.current?.getBoundingClientRect();
+    
+    // Use cached rect to avoid forced reflow
+    const rect = containerRectRef.current;
     if (!rect) return 'rgb(255,255,255)';
+    
     // Clamp x/y to container bounds (same as blob rendering)
     let clampedX = x;
     let clampedY = y;
@@ -525,24 +538,33 @@ export const BackgroundGradientAnimation = ({
 
   // Global mousemove handler for robust tracking (only when pointer blobs enabled)
   useEffect(() => {
+    let mouseMoveTimeout: NodeJS.Timeout;
     function handleMouseMove(event: MouseEvent) {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
+      if (!containerRef.current || !containerRectRef.current) return;
+      
+      // Use cached rect to avoid forced reflow
+      const rect = containerRectRef.current;
       const relativeX = event.clientX - rect.left;
       const relativeY = event.clientY - rect.top;
-      setTgX(relativeX);
-      setTgY(relativeY);
-      // Update debug sample color on mouse move
-      setDebugSample({ x: event.clientX, y: event.clientY });
-      // Update target color only
-      const contrastingColor = selectContrastingColor(relativeX, relativeY);
-      setTargetPointerColor(contrastingColor);
+      
+      // Throttle mouse updates to reduce performance impact
+      clearTimeout(mouseMoveTimeout);
+      mouseMoveTimeout = setTimeout(() => {
+        setTgX(relativeX);
+        setTgY(relativeY);
+        // Update debug sample color on mouse move
+        setDebugSample({ x: event.clientX, y: event.clientY });
+        // Update target color only
+        const contrastingColor = selectContrastingColor(relativeX, relativeY);
+        setTargetPointerColor(contrastingColor);
+      }, 16); // ~60fps throttling
     }
     if (interactive && ENABLE_POINTER_BLOBS) {
       window.addEventListener('mousemove', handleMouseMove);
     }
     return () => {
       window.removeEventListener('mousemove', handleMouseMove);
+      clearTimeout(mouseMoveTimeout);
     };
   }, [interactive]);
 
@@ -558,9 +580,19 @@ export const BackgroundGradientAnimation = ({
 
   // Expose live positions of CSS-animated background blobs for color sampling
   useEffect(() => {
+    let lastUpdateTime = 0;
+    const UPDATE_THROTTLE = 100; // Update max every 100ms (10fps)
+    
     function updateLiveBlobPositions() {
-      if (!containerRef.current) return;
-      const rect = containerRef.current.getBoundingClientRect();
+      const now = Date.now();
+      if (now - lastUpdateTime < UPDATE_THROTTLE) return;
+      lastUpdateTime = now;
+      
+      if (!containerRef.current || !containerRectRef.current) return;
+      
+      // Use cached rect to avoid forced reflow
+      const rect = containerRectRef.current;
+      
       // Query all background blob elements by a class or data attribute
       const blobNodes = containerRef.current.querySelectorAll('.background-blob');
       const blobs = Array.from(blobNodes).map((el: Element) => {
@@ -573,6 +605,7 @@ export const BackgroundGradientAnimation = ({
         const radius = Math.max(blobRect.width, blobRect.height) / 2;
         return { x: centerX, y: centerY, radius, color };
       });
+      
       // Add pointer-following blobs if enabled
       let pointerBlobs: any[] = [];
       if (ENABLE_POINTER_BLOBS && blobsRef.current && swarmRef.current) {
@@ -593,9 +626,10 @@ export const BackgroundGradientAnimation = ({
       }
       (window as any).__backgroundBlobs = [...blobs, ...pointerBlobs];
     }
+    
     updateLiveBlobPositions();
-    // increase sampling rate for smoother color reads (60fps)
-    const interval = setInterval(updateLiveBlobPositions, 1000 / 60); // 60fps
+    // Reduced sampling rate for better performance (10fps instead of 60fps)
+    const interval = setInterval(updateLiveBlobPositions, UPDATE_THROTTLE);
     return () => clearInterval(interval);
   }, [containerRef]);
 
@@ -697,26 +731,36 @@ export const BackgroundGradientAnimation = ({
 
   // Track debug tick for periodic re-render
   const [debugTick, setDebugTick] = useState(0);
-  // # NEW CODE - TESTING: periodic debug sampler
+  // # NEW CODE - TESTING: periodic debug sampler (reduced frequency for performance)
   useEffect(() => {
     // Store the last sampled mouse position
     let lastX = 0;
     let lastY = 0;
+    let mouseMoveTimeout: NodeJS.Timeout;
+    
     function updateLastMouse(e: MouseEvent) {
-      lastX = e.clientX;
-      lastY = e.clientY;
+      // Throttle mouse position updates
+      clearTimeout(mouseMoveTimeout);
+      mouseMoveTimeout = setTimeout(() => {
+        lastX = e.clientX;
+        lastY = e.clientY;
+      }, 100);
     }
+    
     window.addEventListener('mousemove', updateLastMouse);
-    // Sample every 500ms
+    
+    // Sample every 2 seconds instead of 500ms for better performance
     const interval = setInterval(() => {
       if (typeof (window as any).__getBackgroundColorAt === 'function') {
         (window as any).__getBackgroundColorAt(lastX, lastY);
       }
       setDebugTick(tick => tick + 1); // force re-render of debug dots
-    }, 500);
+    }, 2000);
+    
     return () => {
       window.removeEventListener('mousemove', updateLastMouse);
       clearInterval(interval);
+      clearTimeout(mouseMoveTimeout);
     };
   }, []);
 

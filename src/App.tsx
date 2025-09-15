@@ -21,33 +21,51 @@ const App: React.FC = () => {
   const { shouldReduceEffects } = useMobileDetection();
   
   useEffect(() => {
-    // Initialize EmailJS
-    emailjs.init("05vg-yZOLtTcjt36N");
-    
-    // Set dark mode as default
-    if (!localStorage.getItem('theme')) {
-      localStorage.setItem('theme', 'dark');
-    }
-    
-    const theme = localStorage.getItem('theme');
-    if (theme === 'dark') {
-      document.documentElement.classList.add('dark');
-    } else {
-      document.documentElement.classList.remove('dark');
-    }
-    
-    // Register service worker
-    if ('serviceWorker' in navigator) {
-      window.addEventListener('load', () => {
-        navigator.serviceWorker.register('/sw.js')
-          .then((registration) => {
-            // Service worker registered successfully
-          })
-          .catch((registrationError) => {
-            // Service worker registration failed silently
-          });
-      });
-    }
+    // Initialize everything asynchronously to avoid blocking main thread
+    const initializeApp = async () => {
+      // Yield to main thread first
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      // Initialize EmailJS
+      try {
+        emailjs.init("05vg-yZOLtTcjt36N");
+      } catch (error) {
+        console.warn('EmailJS initialization failed:', error);
+      }
+      
+      // Yield again
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      // Set dark mode as default
+      if (!localStorage.getItem('theme')) {
+        localStorage.setItem('theme', 'dark');
+      }
+      
+      const theme = localStorage.getItem('theme');
+      if (theme === 'dark') {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+      
+      // Yield again
+      await new Promise(resolve => setTimeout(resolve, 0));
+      
+      // Register service worker
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              // Service worker registered successfully
+            })
+            .catch((registrationError) => {
+              // Service worker registration failed silently
+            });
+        });
+      }
+    };
+
+    initializeApp();
   }, []);
 
   // Helper function to get glass overlay classes
