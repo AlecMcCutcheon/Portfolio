@@ -11,18 +11,18 @@ export const usePerformanceOptimizedAnimation = () => {
   const getOptimizedVariants = (baseDuration: number = 0.4, baseDelay: number = 0) => {
     if (shouldDisableAnimations) {
       return {
-        hidden: { opacity: 1, y: 0 },
-        visible: { opacity: 1, y: 0 },
+        initial: { opacity: 1, y: 0 },
+        animate: { opacity: 1, y: 0 },
         transition: { duration: 0.01 }
       };
     }
 
     return {
-      hidden: { 
+      initial: { 
         opacity: 0, 
         y: 20 // Reduced from 30 to 20 for smoother animation
       },
-      visible: { 
+      animate: { 
         opacity: 1, 
         y: 0 
       },
@@ -41,18 +41,18 @@ export const usePerformanceOptimizedAnimation = () => {
   ) => {
     if (shouldDisableAnimations) {
       return (index: number) => ({
-        hidden: { opacity: 1, y: 0 },
-        visible: { opacity: 1, y: 0 },
+        initial: { opacity: 1, y: 0 },
+        animate: { opacity: 1, y: 0 },
         transition: { duration: 0.01 }
       });
     }
 
     return (index: number) => ({
-      hidden: { 
+      initial: { 
         opacity: 0, 
         y: 15 // Reduced from 30 to 15
       },
-      visible: { 
+      animate: { 
         opacity: 1, 
         y: 0 
       },

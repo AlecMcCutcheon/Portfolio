@@ -1,4 +1,4 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState, useRef } from 'react';
 import { generateProceduralImage, stableStringify, ProceduralOptions } from './ProceduralArt';
 
 interface OptimizedImageProps {
@@ -25,34 +25,11 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
   sizes = '(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw'
 }) => {
   const [isLoaded, setIsLoaded] = useState(false);
-  const [isInView, setIsInView] = useState(priority); // Load immediately if priority
   const imgRef = useRef<HTMLImageElement>(null);
   
   // Check if data is a URL (starts with http or data:)
   const isUrl = typeof data === 'string' && (data.startsWith('http') || data.startsWith('data:'));
   const seed = isUrl ? data : (typeof data === 'string' ? data : stableStringify(data));
-  
-  useEffect(() => {
-    if (priority) return; // Skip intersection observer for priority images
-    
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setIsInView(true);
-          observer.disconnect();
-        }
-      },
-      { 
-        rootMargin: '50px' // Start loading 50px before the image comes into view
-      }
-    );
-    
-    if (imgRef.current) {
-      observer.observe(imgRef.current);
-    }
-    
-    return () => observer.disconnect();
-  }, [priority]);
   
   const generateOptimizedSrc = (targetWidth: number, targetHeight: number) => {
     if (isUrl) {
@@ -83,18 +60,6 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
       .join(', ');
   };
   
-  if (!isInView) {
-    // Placeholder while not in view
-    return (
-      <div 
-        ref={imgRef}
-        className={`bg-gray-200 dark:bg-gray-700 animate-pulse ${className}`}
-        style={{ width, height, ...style }}
-        aria-label={alt}
-      />
-    );
-  }
-  
   const srcSet = generateResponsiveSrcSet();
   
   return (
@@ -105,7 +70,7 @@ export const OptimizedImage: React.FC<OptimizedImageProps> = ({
       width={width}
       height={height}
       alt={alt}
-      className={`transition-opacity duration-300 ${isLoaded ? 'opacity-100' : 'opacity-0'} ${className}`}
+      className={`w-full h-full transition-transform duration-300 hover:scale-110 object-cover ${className}`}
       style={style}
       loading={priority ? 'eager' : 'lazy'}
       decoding="async"
