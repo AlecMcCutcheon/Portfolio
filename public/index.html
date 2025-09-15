@@ -8,18 +8,22 @@
     <meta
       name="description"
       content="Professional portfolio showcasing creative works, certifications, and professional background">
-    
     <!-- Critical preconnect hints - highest priority -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
+    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
     <link rel="preconnect" href="https://api.github.com" crossorigin>
     <link rel="dns-prefetch" href="https://api.github.com">
     <link rel="preconnect" href="https://api.emailjs.com" crossorigin>
     <link rel="dns-prefetch" href="https://api.emailjs.com">
-    
+
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
 
     <!-- Performance optimizations - Critical LCP image -->
     <link rel="preload" href="%PUBLIC_URL%/images/Profile_Image.webp" as="image" type="image/webp" fetchpriority="high">
-    <link rel="preload" href="%PUBLIC_URL%/images/CompTIA_badge.webp" as="image" type="image/webp">
+
+    <!-- Critical font preloading for LCP text - will be handled by CSS font-display: swap -->
 
     <!-- Google Analytics 4 - Privacy Sandbox Future-Proof Implementation -->
     <script>
@@ -119,12 +123,12 @@
       }
     </script>
 
-    <!-- Google Fonts - Non-blocking loading -->
+    <!-- Google Fonts - Optimized loading with font-display: swap -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
     <noscript>
-      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     </noscript>
 
     <title>Alec McCutcheon - Portfolio</title>
@@ -195,21 +199,68 @@
         margin: 0 auto 2rem; 
         box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); 
         border: 4px solid rgba(255, 255, 255, 0.1); 
-        object-fit: cover; 
+        object-fit: cover;
       }
       .hero-title { 
-        font-size: 3rem; 
+        font-size: clamp(2rem, 5vw, 3rem); 
         font-weight: 700; 
-        color: #f8fafc; 
+        color: #1e293b; 
         margin-bottom: 1.5rem; 
-        text-align: center; 
+        text-align: center;
+        line-height: 1.2;
+        font-family: 'Inter', system-ui, sans-serif;
+      }
+      .dark .hero-title {
+        color: #f8fafc;
+      }
+      
+      /* Critical gradient text styles for LCP */
+      .gradient-text {
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+        -webkit-background-clip: text;
+        background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: #3b82f6; /* Fallback color for faster rendering */
       }
       .hero-subtitle { 
-        font-size: 1.25rem; 
+        font-size: clamp(1rem, 2.5vw, 1.25rem); 
         color: #cbd5e1; 
         margin-bottom: 2rem; 
-        text-align: center; 
+        text-align: center;
+        line-height: 1.5;
+        font-family: 'Inter', system-ui, sans-serif;
       }
+      
+      /* Critical subtitle badge styles */
+      .subtitle-badge {
+        display: inline-block;
+        padding: 0.5rem 1rem;
+        margin: 0.25rem;
+        font-weight: 500;
+        font-size: 1rem;
+        border-radius: 9999px;
+        background-color: rgba(255, 255, 255, 0.5);
+        border: 1px solid rgba(255, 255, 255, 0.3);
+        color: #1e40af;
+        font-family: 'Inter', system-ui, sans-serif;
+      }
+      
+      /* Critical description text styles */
+      .hero-description {
+        font-size: 1.125rem;
+        line-height: 1.6;
+        color: #64748b;
+        margin-bottom: 3rem;
+        max-width: 48rem;
+        margin-left: auto;
+        margin-right: auto;
+        font-family: 'Inter', system-ui, sans-serif;
+      }
+      
+      /* Critical utility classes */
+      .mt-4 { margin-top: 1rem; }
+      
+      /* Remove duplicate - gradient-text already defined above */
       
       /* Critical button styles */
       .btn-primary { 
