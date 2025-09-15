@@ -153,7 +153,8 @@ function randomBlobConfig(
   allBlobs: any[] = []
 ): any {
   const gradientsList = gradients;
-  const size = randomInRange(340, 520);
+  // PERFORMANCE: Reduced blob size for better desktop performance
+  const size = randomInRange(250, 380);
   let pos: { top: number; left: number };
   let tries = 0;
   const regionToUse = region || getRegionForIndex(idx);
@@ -177,7 +178,8 @@ function randomBlobConfig(
     idx,
     duration: randomInRange(16, 26),
     size,
-    initialOpacity: randomInRange(0.28, 0.5),
+    // PERFORMANCE: Reduced opacity range for better desktop performance
+    initialOpacity: randomInRange(0.2, 0.35),
     initialPos: pos,
     gradientIdx,
     lifespan: randomInRange(30, 60), // 30s to 60s
@@ -566,13 +568,15 @@ const BlobsBackground: React.FC<BlobsBackgroundProps> = ({ count, containerRef }
   const [intents, setIntents] = useState<BlobIntent[]>([]);
 
   useEffect(() => {
+    // PERFORMANCE: Reduce blob count from passed count to max 6 for better desktop performance
+    const reducedCount = Math.min(count, 6);
     const newBlobs: any[] = [];
-    for (let i = 0; i < count; i++) {
+    for (let i = 0; i < reducedCount; i++) {
       const region = getRegionForIndex(i);
       newBlobs.push(randomBlobConfig(i, newBlobs.map(b => b.initialPos), region));
     }
     setBlobs(newBlobs);
-    setIntents(Array(count).fill(undefined));
+    setIntents(Array(reducedCount).fill(undefined));
   }, [count]);
 
   // When a blob fades out, respawn in its region and clear its intent
@@ -622,15 +626,9 @@ const BlobsBackground: React.FC<BlobsBackgroundProps> = ({ count, containerRef }
     }
   }, [blobs]);
 
-  // Expose animated blob positions, sizes, and colors globally for color sampling
+  // DISABLED FOR PERFORMANCE: Blob sampling disabled for better desktop performance
   useEffect(() => {
-    (window as any).__backgroundBlobs = blobs.map(blob => ({
-      // Convert percent positions to px
-      x: (blob.targetPos?.left ?? blob.initialPos.left) / 100 * containerSize.width,
-      y: (blob.targetPos?.top ?? blob.initialPos.top) / 100 * containerSize.height,
-      radius: (blob.size ?? 400) / 2, // size is px diameter, radius is px
-      color: blob.gradientIdx !== undefined ? gradients[blob.gradientIdx][0] : '#a5b4fc',
-    }));
+    // No-op - blob sampling disabled
   }, [blobs, containerSize]);
   return (
     <div className="absolute inset-0 overflow-hidden pointer-events-none z-0">

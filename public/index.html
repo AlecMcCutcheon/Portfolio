@@ -22,6 +22,10 @@
 
     <!-- Performance optimizations - Critical LCP image -->
     <link rel="preload" href="%PUBLIC_URL%/images/Profile_Image.webp" as="image" type="image/webp" fetchpriority="high">
+    
+    <!-- Desktop-specific optimizations -->
+    <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" as="style">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap">
 
     <!-- Critical font preloading for LCP text - will be handled by CSS font-display: swap -->
 
@@ -222,6 +226,23 @@
         -webkit-text-fill-color: transparent;
         color: #3b82f6; /* Fallback color for faster rendering */
       }
+      
+      /* Desktop-specific optimizations for better LCP */
+      @media (min-width: 768px) {
+        .hero-title {
+          font-size: clamp(2.5rem, 4vw, 3.5rem);
+          line-height: 1.1;
+        }
+        .hero-description {
+          font-size: 1.25rem;
+          line-height: 1.7;
+        }
+        .profile-image {
+          width: 160px;
+          height: 160px;
+          margin: 0 auto 2.5rem;
+        }
+      }
       .hero-subtitle { 
         font-size: clamp(1rem, 2.5vw, 1.25rem); 
         color: #cbd5e1; 
@@ -256,6 +277,7 @@
         margin-right: auto;
         font-family: 'Inter', system-ui, sans-serif;
       }
+      
       
       /* Critical utility classes */
       .mt-4 { margin-top: 1rem; }

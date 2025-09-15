@@ -17,15 +17,6 @@ const SpotlightGlow: React.FC<SpotlightGlowProps> = ({ children, className = '',
   const [isSmallScreen, setIsSmallScreen] = useState(false);
   useEffect(() => {
     const check = () => {
-      // OLD CODE - KEEP UNTIL CONFIRMED WORKING
-      // const hasTouch = (
-      //   'ontouchstart' in window ||
-      //   (navigator as any).maxTouchPoints > 0 ||
-      //   window.matchMedia('(hover: none)').matches ||
-      //   window.matchMedia('(pointer: coarse)').matches
-      // );
-      // setIsTouchDevice(!!hasTouch);
-
       // NEW CODE - TESTING: Treat as touch-only only when device supports touch AND lacks hover capability
       const hoverCapable = window.matchMedia('(hover: hover)').matches;
       const supportsTouch = ('ontouchstart' in window) || ((navigator as any).maxTouchPoints > 0);
@@ -54,11 +45,11 @@ const SpotlightGlow: React.FC<SpotlightGlowProps> = ({ children, className = '',
       window.removeEventListener('resize', update);
     };
   }, []);
-  // per-edge colors
-  const [topColor, setTopColor] = useState('rgba(255,255,255,0.18)');
-  const [rightColor, setRightColor] = useState('rgba(255,255,255,0.18)');
-  const [bottomColor, setBottomColor] = useState('rgba(255,255,255,0.18)');
-  const [leftColor, setLeftColor] = useState('rgba(255,255,255,0.18)');
+  // DISABLED FOR PERFORMANCE: Inner glow disabled (no color sampling)
+  const [topColor, setTopColor] = useState('rgba(255,255,255,0)');
+  const [rightColor, setRightColor] = useState('rgba(255,255,255,0)');
+  const [bottomColor, setBottomColor] = useState('rgba(255,255,255,0)');
+  const [leftColor, setLeftColor] = useState('rgba(255,255,255,0)');
 
   // white spotlight
   const [spotX, setSpotX] = useState(0);
@@ -95,49 +86,24 @@ const SpotlightGlow: React.FC<SpotlightGlowProps> = ({ children, className = '',
     return `rgba(${r},${g},${b},${alpha})`;
   };
 
-  // Continuously sample per-edge colors
+  // DISABLED FOR PERFORMANCE: Color sampling disabled (inner glow removed)
   const rafRef = useRef<number | null>(null);
   const sampleEdges = useCallback(() => {
-    if (!containerEl) return;
-    const rect = containerEl.getBoundingClientRect();
-    const s = insetSample;
-    const top = readColorAt(rect.left + rect.width / 2, rect.top + s);
-    const right = readColorAt(rect.right - s, rect.top + rect.height / 2);
-    const bottom = readColorAt(rect.left + rect.width / 2, rect.bottom - s);
-    const left = readColorAt(rect.left + s, rect.top + rect.height / 2);
-    const edgeAlpha = isDarkMode ? 0.24 : 0.16; // brighter on dark, darker on light
-    const t = parseToRgba(top, edgeAlpha); if (t) setTopColor(t);
-    const r = parseToRgba(right, edgeAlpha); if (r) setRightColor(r);
-    const b = parseToRgba(bottom, edgeAlpha); if (b) setBottomColor(b);
-    const l = parseToRgba(left, edgeAlpha); if (l) setLeftColor(l);
-  }, [readColorAt, insetSample, isDarkMode, containerEl]);
-
-  const startLoop = useCallback(() => {
-    if (rafRef.current) return;
-    const loop = () => {
-      sampleEdges();
-      rafRef.current = requestAnimationFrame(loop);
-    };
-    rafRef.current = requestAnimationFrame(loop);
-  }, [sampleEdges]);
-
-  const stopLoop = useCallback(() => {
-    if (rafRef.current) {
-      cancelAnimationFrame(rafRef.current);
-      rafRef.current = null;
-    }
+    // No-op - color sampling disabled
   }, []);
 
-  // Disable dynamic inner-glow sampling on touch/mobile or small screens
+  const startLoop = useCallback(() => {
+    // No-op - color sampling disabled
+  }, []);
+
+  const stopLoop = useCallback(() => {
+    // No-op - color sampling disabled
+  }, []);
+
+  // DISABLED FOR PERFORMANCE: Dynamic inner-glow sampling disabled on all devices
   useEffect(() => {
-    const interactionsDisabled = isTouchDevice || isSmallScreen;
-    if (interactionsDisabled) {
-      stopLoop();
-      return;
-    }
-    startLoop();
-    return () => stopLoop();
-  }, [startLoop, stopLoop, isTouchDevice, isSmallScreen]);
+    // No-op - inner glow sampling disabled for performance
+  }, []);
 
   const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (isTouchDevice || isSmallScreen) return;

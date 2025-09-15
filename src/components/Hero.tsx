@@ -63,18 +63,18 @@ const Hero: React.FC = () => {
               ))}
             </div>
 
-            {/* Description - Optimized for better LCP */}
-            <div className="mb-12 max-w-3xl mx-auto">
-              <p className="text-lg text-secondary-500 dark:text-secondary-400">
-                Certified IT Specialist, seasoned PowerShell programmer, automation engineer, and experienced Tier 1–3 support technician. I specialize in automation, scripting, and RMM migration, developing custom solutions that streamline business operations and solve unique client challenges. My background spans system administration, technical support, and freelance work in PowerShell scripting and web design. I also have hands-on experience with network-attached storage (NAS) systems—particularly Unraid for a range of applications including Docker container orchestration, reverse proxy setup, SSL certificate management, and web server hosting.
-              </p>
-              <p className="text-lg text-secondary-500 dark:text-secondary-400 mt-4">
-                Outside of my professional work, I'm passionate about using technology to help others—whether it's volunteering my skills for individuals in need, building educational resources like a scareware simulation site to help users recognize online threats, or creating open-source tools to solve real-world problems.
-              </p>
-              <p className="text-lg text-secondary-500 dark:text-secondary-400 mt-4">
-                I'm always exploring new technologies—dabbling in React, Flutter, and integrating AI into my workflow—to stay at the forefront of innovation and to empower others through knowledge and practical solutions.
-              </p>
-            </div>
+             {/* Description - Desktop optimized for better LCP */}
+             <div className="mb-12 max-w-3xl mx-auto hero-description">
+               <p className="text-lg md:text-xl text-secondary-500 dark:text-secondary-400 leading-relaxed">
+                 Certified IT Specialist, seasoned PowerShell programmer, automation engineer, and experienced Tier 1–3 support technician. I specialize in automation, scripting, and RMM migration, developing custom solutions that streamline business operations and solve unique client challenges. My background spans system administration, technical support, and freelance work in PowerShell scripting and web design. I also have hands-on experience with network-attached storage (NAS) systems—particularly Unraid for a range of applications including Docker container orchestration, reverse proxy setup, SSL certificate management, and web server hosting.
+               </p>
+               <p className="text-lg md:text-xl text-secondary-500 dark:text-secondary-400 mt-4 leading-relaxed">
+                 Outside of my professional work, I'm passionate about using technology to help others—whether it's volunteering my skills for individuals in need, building educational resources like a scareware simulation site to help users recognize online threats, or creating open-source tools to solve real-world problems.
+               </p>
+               <p className="text-lg md:text-xl text-secondary-500 dark:text-secondary-400 mt-4 leading-relaxed">
+                 I'm always exploring new technologies—dabbling in React, Flutter, and integrating AI into my workflow—to stay at the forefront of innovation and to empower others through knowledge and practical solutions.
+               </p>
+             </div>
 
             {/* CTA Buttons */}
             <motion.div
