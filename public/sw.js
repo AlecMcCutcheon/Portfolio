@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-const CACHE_VERSION = 'portfolio-v7';
+const CACHE_VERSION = 'portfolio-v8';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;
@@ -116,8 +116,20 @@ async function cacheFirst(request, cacheName) {
     
     // Guard against HTML masquerading as other files (GitHub Pages 404 fallback)
     if (networkResponse.ok && !contentType.includes("text/html")) {
-      // Cache the original response without modifying headers to preserve MIME types
-      cache.put(request, networkResponse.clone());
+      // Create a new response with enhanced cache headers
+      const enhancedResponse = new Response(networkResponse.body, {
+        status: networkResponse.status,
+        statusText: networkResponse.statusText,
+        headers: {
+          ...Object.fromEntries(networkResponse.headers.entries()),
+          'Cache-Control': 'public, max-age=31536000, immutable',
+          'X-Served-By': 'Service-Worker-Network'
+        }
+      });
+      
+      // Cache the enhanced response
+      cache.put(request, enhancedResponse.clone());
+      return enhancedResponse;
     }
     
     return networkResponse;
