@@ -1,16 +1,15 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="utf-8" />
-    <link rel="icon" href="%PUBLIC_URL%/images/Icon.ico" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#000000" />
+    <meta charset="utf-8">
+    <link rel="icon" href="%PUBLIC_URL%/images/Icon.ico">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#000000">
     <meta
       name="description"
-      content="Professional portfolio showcasing creative works, certifications, and professional background"
-    />
-    <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
-    
+      content="Professional portfolio showcasing creative works, certifications, and professional background">
+    <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
+
     <!-- Performance optimizations -->
     <link rel="preload" href="%PUBLIC_URL%/images/Profile_Image.webp" as="image" type="image/webp">
     <link rel="preload" href="%PUBLIC_URL%/images/CompTIA_badge.webp" as="image" type="image/webp">
@@ -18,9 +17,9 @@
     <link rel="dns-prefetch" href="https://api.github.com">
     <link rel="preconnect" href="https://api.emailjs.com" crossorigin>
     <link rel="dns-prefetch" href="https://api.emailjs.com">
-    
+
     <!-- Google Analytics 4 - Privacy Sandbox Future-Proof Implementation -->
-    <script type="text/javascript">
+    <script>
       // Initialize Google Analytics with Privacy Sandbox compatibility
       let analyticsLoaded = false;
       
@@ -116,143 +115,7 @@
         setTimeout(loadAnalytics, 5000);
       }
     </script>
-    
-    <!-- Error Handling and Script Detection for MIME Type Issues -->
-    <script type="text/javascript">
-      // Debug: Track all script loading attempts
-      console.log('🔍 Script Detection: Starting to monitor script loading...');
-      
-      // Intercept script creation to fix MIME types immediately
-      const originalCreateElement = document.createElement;
-      document.createElement = function(tagName) {
-        const element = originalCreateElement.call(this, tagName);
-        if (tagName.toLowerCase() === 'script') {
-          // Override the type setter to ensure it's always 'text/javascript'
-          const originalTypeSetter = Object.getOwnPropertyDescriptor(HTMLScriptElement.prototype, 'type') || 
-                                   Object.getOwnPropertyDescriptor(Element.prototype, 'type');
-          if (originalTypeSetter) {
-            Object.defineProperty(element, 'type', {
-              set: function(value) {
-                // Always set to 'text/javascript' if empty or invalid
-                const finalValue = (!value || value === '') ? 'text/javascript' : value;
-                originalTypeSetter.set.call(this, finalValue);
-                console.log('🔧 Intercepted script type setting:', finalValue);
-              },
-              get: originalTypeSetter.get,
-              configurable: true,
-              enumerable: true
-            });
-          }
-        }
-        return element;
-      };
-      
-      // Global error handler for script loading issues
-      window.addEventListener('error', function(event) {
-        if (event.target && event.target.tagName === 'SCRIPT') {
-          const src = event.target.src;
-          console.log('🚨 Script Error Detected:', {
-            src: src,
-            error: event.message,
-            filename: event.filename,
-            lineno: event.lineno,
-            colno: event.colno
-          });
-          
-          // Handle MIME type errors specifically
-          if (event.message && event.message.includes('MIME type')) {
-            console.warn('🚫 MIME type error prevented:', src);
-            event.preventDefault();
-            return false;
-          }
-          
-          if (src && (src.includes('google-analytics') || src.includes('gtag'))) {
-            console.warn('Google Analytics script error handled:', src);
-            event.preventDefault();
-            return false;
-          }
-        }
-      }, true);
-      
-      // Handle unhandled promise rejections that might cause MIME type errors
-      window.addEventListener('unhandledrejection', function(event) {
-        if (event.reason && event.reason.message && 
-            event.reason.message.includes('MIME type')) {
-          console.warn('MIME type error handled:', event.reason.message);
-          event.preventDefault();
-        }
-      });
-      
-      // Debug: Monitor all script elements being added to the page
-      const observer = new MutationObserver(function(mutations) {
-        mutations.forEach(function(mutation) {
-          mutation.addedNodes.forEach(function(node) {
-            if (node.tagName === 'SCRIPT' && node.src) {
-              console.log('📜 New script detected:', {
-                src: node.src,
-                type: node.type,
-                async: node.async,
-                defer: node.defer
-              });
-              
-              // Fix MIME type issue: Ensure all scripts have proper type attribute
-              if (!node.type || node.type === '') {
-                node.type = 'text/javascript';
-                console.log('🔧 Fixed MIME type for script:', node.src);
-              }
-            }
-          });
-        });
-      });
-      
-      // Fix existing scripts that might already be loaded
-      function fixExistingScripts() {
-        const scripts = document.querySelectorAll('script[src]');
-        scripts.forEach(function(script) {
-          if (!script.type || script.type === '') {
-            script.type = 'text/javascript';
-            console.log('🔧 Fixed existing script MIME type:', script.src);
-          }
-        });
-      }
-      
-      // Start observing when DOM is ready
-      document.addEventListener('DOMContentLoaded', function() {
-        // Fix any scripts that were loaded before the observer started
-        fixExistingScripts();
-        
-        // Start monitoring for new scripts
-        observer.observe(document.head, { childList: true, subtree: true });
-        console.log('👀 Script observer started');
-        
-        // Also check periodically for any scripts that might be missed
-        setInterval(fixExistingScripts, 1000);
-        
-        // Additional aggressive fix: Override script loading
-        const originalAppendChild = Node.prototype.appendChild;
-        Node.prototype.appendChild = function(child) {
-          if (child.tagName === 'SCRIPT' && child.src) {
-            if (!child.type || child.type === '') {
-              child.type = 'text/javascript';
-              console.log('🔧 Fixed script type during append:', child.src);
-            }
-          }
-          return originalAppendChild.call(this, child);
-        };
-        
-        const originalInsertBefore = Node.prototype.insertBefore;
-        Node.prototype.insertBefore = function(newNode, referenceNode) {
-          if (newNode.tagName === 'SCRIPT' && newNode.src) {
-            if (!newNode.type || newNode.type === '') {
-              newNode.type = 'text/javascript';
-              console.log('🔧 Fixed script type during insert:', newNode.src);
-            }
-          }
-          return originalInsertBefore.call(this, newNode, referenceNode);
-        };
-      });
-    </script>
-    
+
     <!-- Google Fonts - Ultra-optimized loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -260,9 +123,8 @@
     <noscript>
       <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
     </noscript>
-    
+
     <title>Alec McCutcheon - Portfolio</title>
-    
     <!-- Critical CSS for initial render -->
     <style>
       /* Critical styles to prevent layout shifts */

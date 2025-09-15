@@ -1,3 +1,4 @@
+/* eslint-disable no-restricted-globals */
 const CACHE_VERSION = 'portfolio-v5';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
@@ -13,17 +14,6 @@ const STATIC_ASSETS = [
   '/pdfs/resume.pdf'
 ];
 
-// Cache strategies
-const CACHE_STRATEGIES = {
-  // Cache first for static assets
-  STATIC: 'cache-first',
-  // Network first for API calls
-  API: 'network-first',
-  // Cache first for images
-  IMAGES: 'cache-first',
-  // Stale while revalidate for HTML
-  HTML: 'stale-while-revalidate'
-};
 
 // Install event - cache static assets
 self.addEventListener('install', (event) => {
@@ -48,6 +38,7 @@ self.addEventListener('activate', (event) => {
           if (!cacheName.startsWith(CACHE_VERSION)) {
             return caches.delete(cacheName);
           }
+          return undefined;
         })
       );
     }).then(() => {
