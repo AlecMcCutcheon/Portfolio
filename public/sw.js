@@ -65,8 +65,14 @@ self.addEventListener('fetch', (event) => {
   // Skip preconnect requests to allow them to work properly
   if (request.headers.get('purpose') === 'preconnect') return;
   
-  // Debug logging for troubleshooting
-  console.log('Service Worker fetching:', request.url);
+  // Skip Google Analytics and other third-party scripts to prevent MIME type issues
+  if (url.hostname === 'www.googletagmanager.com' || 
+      url.hostname === 'www.google-analytics.com' ||
+      url.hostname === 'www.googleadservices.com') {
+    return;
+  }
+  
+  // Debug logging removed for production
 
   // Determine cache strategy based on request type
   if (url.pathname.includes('/api/') || url.hostname === 'api.github.com' || url.hostname === 'api.emailjs.com') {
