@@ -180,6 +180,7 @@ const Contact: React.FC = () => {
                     animate={inView ? { opacity: 1, scale: 1 } : {}}
                     transition={{ duration: 0.3, delay: 0.4 + index * 0.05 }}
                     className="w-10 h-10 rounded-lg flex items-center justify-center text-secondary-600 dark:text-secondary-400 transition-all duration-200 bg-white/60 dark:bg-dark-800/50 backdrop-blur-sm border border-white/30 dark:border-dark-700/40 ring-1 ring-white/40 dark:ring-white/15 shadow-md hover:scale-[1.05] hover:shadow-lg hover:ring-white/60 dark:hover:ring-white/30 hover:bg-white/70 dark:hover:bg-dark-800/60"
+                    aria-label={`Connect with me on ${social.name}`}
                   >
                     {social.icon}
                   </motion.a>
