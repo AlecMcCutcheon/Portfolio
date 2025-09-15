@@ -158,6 +158,7 @@ async function cacheFirstWithHeaders(request, cacheName) {
           'X-Cache-TTL': '31536000'
         }
       });
+      console.log('Cache response headers:', Object.fromEntries(response.headers.entries()));
       return response;
     }
     
@@ -178,6 +179,8 @@ async function cacheFirstWithHeaders(request, cacheName) {
           'X-Cache-TTL': '31536000'
         }
       });
+      
+      console.log('Enhanced response headers:', Object.fromEntries(enhancedResponse.headers.entries()));
       
       // Cache the enhanced response
       cache.put(request, enhancedResponse.clone());
