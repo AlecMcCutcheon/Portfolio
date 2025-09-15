@@ -1,0 +1,63 @@
+# GitHub Pages Headers Configuration
+# Set long cache lifetimes for static assets
+
+# Service Worker
+/sw.js
+  Content-Type: application/javascript
+  Cache-Control: public, max-age=31536000, immutable
+
+# Static JavaScript files
+/*.js
+  Cache-Control: public, max-age=31536000, immutable
+
+# Static CSS files  
+/*.css
+  Cache-Control: public, max-age=31536000, immutable
+
+# Images with long cache lifetime
+/images/*.webp
+  Cache-Control: public, max-age=31536000, immutable
+
+/images/*.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/images/*.jpg
+  Cache-Control: public, max-age=31536000, immutable
+
+/images/*.jpeg
+  Cache-Control: public, max-age=31536000, immutable
+
+/images/*.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+/images/*.ico
+  Cache-Control: public, max-age=31536000, immutable
+
+# PDF files
+/pdfs/*.pdf
+  Cache-Control: public, max-age=31536000, immutable
+
+# Fonts
+/*.woff
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.woff2
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.ttf
+  Cache-Control: public, max-age=31536000, immutable
+
+/*.eot
+  Cache-Control: public, max-age=31536000, immutable
+
+# HTML files with shorter cache (for updates)
+/*.html
+  Cache-Control: public, max-age=3600
+
+# Root index.html
+/
+  Cache-Control: public, max-age=3600
+
+# Manifest
+/manifest.json
+  Cache-Control: public, max-age=86400
