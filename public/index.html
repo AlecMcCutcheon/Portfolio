@@ -8,15 +8,18 @@
     <meta
       name="description"
       content="Professional portfolio showcasing creative works, certifications, and professional background">
+    
+    <!-- Critical preconnect hints - highest priority -->
+    <link rel="preconnect" href="https://api.github.com" crossorigin>
+    <link rel="dns-prefetch" href="https://api.github.com">
+    <link rel="preconnect" href="https://api.emailjs.com" crossorigin>
+    <link rel="dns-prefetch" href="https://api.emailjs.com">
+    
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
 
     <!-- Performance optimizations -->
     <link rel="preload" href="%PUBLIC_URL%/images/Profile_Image.webp" as="image" type="image/webp">
     <link rel="preload" href="%PUBLIC_URL%/images/CompTIA_badge.webp" as="image" type="image/webp">
-    <link rel="preconnect" href="https://api.github.com" crossorigin>
-    <link rel="dns-prefetch" href="https://api.github.com">
-    <link rel="preconnect" href="https://api.emailjs.com" crossorigin>
-    <link rel="dns-prefetch" href="https://api.emailjs.com">
 
     <!-- Google Analytics 4 - Privacy Sandbox Future-Proof Implementation -->
     <script>
@@ -150,6 +153,30 @@
         0% { background-position: 200% 0; }
         100% { background-position: -200% 0; }
       }
+      /* Critical layout styles to prevent shifts */
+      .container-max { max-width: 1200px; margin: 0 auto; padding: 0 1rem; }
+      .section-padding { padding: 4rem 0; }
+      .min-h-screen { min-height: 100vh; }
+      .flex { display: flex; }
+      .items-center { align-items: center; }
+      .justify-center { justify-content: center; }
+      .text-center { text-align: center; }
+      .relative { position: relative; }
+      .absolute { position: absolute; }
+      .fixed { position: fixed; }
+      .top-0 { top: 0; }
+      .left-0 { left: 0; }
+      .right-0 { right: 0; }
+      .w-full { width: 100%; }
+      .h-16 { height: 4rem; }
+      .z-50 { z-index: 50; }
+      .bg-white\/80 { background-color: rgba(255, 255, 255, 0.8); }
+      .backdrop-blur-sm { backdrop-filter: blur(4px); }
+      .border-b { border-bottom-width: 1px; }
+      .border-secondary-200 { border-color: #e2e8f0; }
+      .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
+      .pt-32 { padding-top: 8rem; }
+      .overflow-hidden { overflow: hidden; }
     </style>
   </head>
   <body>
