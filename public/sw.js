@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'portfolio-v4';
+const CACHE_VERSION = 'portfolio-v5';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;
@@ -95,47 +95,15 @@ async function cacheFirst(request, cacheName) {
     const cached = await cache.match(request);
     
     if (cached) {
-      // Return cached version with long cache headers
-      return new Response(cached.body, {
-        status: cached.status,
-        statusText: cached.statusText,
-        headers: {
-          'Content-Type': cached.headers.get('Content-Type') || 'application/octet-stream',
-          'Cache-Control': 'public, max-age=31536000, immutable',
-          'Expires': new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString(),
-          'Last-Modified': new Date().toUTCString(),
-          'ETag': `"${Date.now()}"`
-        }
-      });
+      // Return cached version without modifying Content-Type to avoid MIME type issues
+      return cached;
     }
     
     const networkResponse = await fetch(request);
     if (networkResponse.ok) {
-      // Cache the response with long-term headers
-      const responseToCache = new Response(networkResponse.body, {
-        status: networkResponse.status,
-        statusText: networkResponse.statusText,
-        headers: {
-          'Content-Type': networkResponse.headers.get('Content-Type') || 'application/octet-stream',
-          'Cache-Control': 'public, max-age=31536000, immutable',
-          'Expires': new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString(),
-          'Last-Modified': new Date().toUTCString(),
-          'ETag': `"${Date.now()}"`
-        }
-      });
-      
-      cache.put(request, responseToCache.clone());
-      
-      // Return the cached version to ensure consistent headers
-      return new Response(networkResponse.body, {
-        status: networkResponse.status,
-        statusText: networkResponse.statusText,
-        headers: {
-          'Content-Type': networkResponse.headers.get('Content-Type') || 'application/octet-stream',
-          'Cache-Control': 'public, max-age=31536000, immutable',
-          'Expires': new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString()
-        }
-      });
+      // Cache the original response without modifying headers to preserve MIME types
+      cache.put(request, networkResponse.clone());
+      return networkResponse;
     }
     return networkResponse;
   } catch (error) {
