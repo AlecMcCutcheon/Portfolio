@@ -51,29 +51,18 @@ const App: React.FC = () => {
       // Yield again
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      // Register service worker - DISABLED DUE TO PERSISTENT MIME TYPE ISSUE
-      // Unregister any existing service workers to ensure clean state
+      // Register service worker - FIXED WITH GITHUB PAGES PATH CORRECTIONS
       if ('serviceWorker' in navigator) {
-        navigator.serviceWorker.getRegistrations().then(function(registrations) {
-          for(let registration of registrations) {
-            registration.unregister();
-            console.log('Service worker unregistered due to MIME type issues');
-          }
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js')
+            .then((registration) => {
+              console.log('Service worker registered successfully');
+            })
+            .catch((registrationError) => {
+              console.warn('Service worker registration failed:', registrationError);
+            });
         });
       }
-      
-      // Service worker disabled until MIME type issue is fully resolved
-      // if ('serviceWorker' in navigator) {
-      //   window.addEventListener('load', () => {
-      //     navigator.serviceWorker.register('/sw.js')
-      //       .then((registration) => {
-      //         // Service worker registered successfully
-      //       })
-      //       .catch((registrationError) => {
-      //         // Service worker registration failed silently
-      //       });
-      //   });
-      // }
     };
 
     initializeApp();

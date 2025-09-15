@@ -1,17 +1,20 @@
 /* eslint-disable no-restricted-globals */
-const CACHE_VERSION = 'portfolio-v5';
+const CACHE_VERSION = 'portfolio-v6';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;
 
-// Static assets to cache immediately
+// GitHub Pages base path
+const BASE_PATH = '/Portfolio';
+
+// Static assets to cache immediately - Fixed paths for GitHub Pages
 const STATIC_ASSETS = [
-  '/',
-  '/manifest.json',
-  '/images/Profile_Image.webp',
-  '/images/CompTIA_badge.webp',
-  '/images/Icon.ico',
-  '/pdfs/resume.pdf'
+  `${BASE_PATH}/`,
+  `${BASE_PATH}/manifest.json`,
+  `${BASE_PATH}/images/Profile_Image.webp`,
+  `${BASE_PATH}/images/CompTIA_badge.webp`,
+  `${BASE_PATH}/images/Icon.ico`,
+  `${BASE_PATH}/pdfs/resume.pdf`
 ];
 
 
@@ -61,6 +64,9 @@ self.addEventListener('fetch', (event) => {
   
   // Skip preconnect requests to allow them to work properly
   if (request.headers.get('purpose') === 'preconnect') return;
+  
+  // Debug logging for troubleshooting
+  console.log('Service Worker fetching:', request.url);
 
   // Determine cache strategy based on request type
   if (url.pathname.includes('/api/') || url.hostname === 'api.github.com' || url.hostname === 'api.emailjs.com') {
@@ -91,11 +97,14 @@ async function cacheFirst(request, cacheName) {
     }
     
     const networkResponse = await fetch(request);
-    if (networkResponse.ok) {
+    const contentType = networkResponse.headers.get("content-type") || "";
+    
+    // Guard against HTML masquerading as other files (GitHub Pages 404 fallback)
+    if (networkResponse.ok && !contentType.includes("text/html")) {
       // Cache the original response without modifying headers to preserve MIME types
       cache.put(request, networkResponse.clone());
-      return networkResponse;
     }
+    
     return networkResponse;
   } catch (error) {
     return new Response('Network error', { status: 408 });
@@ -106,10 +115,14 @@ async function cacheFirst(request, cacheName) {
 async function networkFirst(request, cacheName) {
   try {
     const networkResponse = await fetch(request);
-    if (networkResponse.ok) {
+    const contentType = networkResponse.headers.get("content-type") || "";
+    
+    // Guard against HTML masquerading as other files (GitHub Pages 404 fallback)
+    if (networkResponse.ok && !contentType.includes("text/html")) {
       const cache = await caches.open(cacheName);
       cache.put(request, networkResponse.clone());
     }
+    
     return networkResponse;
   } catch (error) {
     const cache = await caches.open(cacheName);
