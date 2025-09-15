@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-const CACHE_VERSION = 'portfolio-v6';
+const CACHE_VERSION = 'portfolio-v7';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;
@@ -98,8 +98,17 @@ async function cacheFirst(request, cacheName) {
     const cached = await cache.match(request);
     
     if (cached) {
-      // Return cached version without modifying Content-Type to avoid MIME type issues
-      return cached;
+      // Add cache control headers to cached responses
+      const response = new Response(cached.body, {
+        status: cached.status,
+        statusText: cached.statusText,
+        headers: {
+          ...Object.fromEntries(cached.headers.entries()),
+          'Cache-Control': 'public, max-age=31536000, immutable',
+          'X-Served-By': 'Service-Worker'
+        }
+      });
+      return response;
     }
     
     const networkResponse = await fetch(request);
