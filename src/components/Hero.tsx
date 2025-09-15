@@ -19,10 +19,10 @@ const Hero: React.FC = () => {
     <>
       {/* GlassDebugSample disabled for performance */}
       {/* <GlassDebugSample /> */}
-      <section id="home" className="min-h-screen flex items-center justify-center relative pt-32 overflow-hidden">
+      <section id="home" className="hero-section">
         <div className="container-max section-padding relative z-10">
           <div className="text-center max-w-4xl mx-auto">
-            {/* Profile Image */}
+            {/* Profile Image - Optimized for LCP */}
             <picture>
               <source
                 srcSet={`${process.env.PUBLIC_URL || ''}/images/Profile_Image.webp`}
@@ -31,17 +31,18 @@ const Hero: React.FC = () => {
               <img
                 src={`${process.env.PUBLIC_URL || ''}/images/Profile_Image.webp`}
                 alt="Alec McCutcheon profile"
-                className="w-36 h-36 rounded-full mx-auto mb-8 shadow-lg border-4 border-white dark:border-dark-800 object-cover"
+                className="profile-image"
                 width="144"
                 height="144"
                 loading="eager"
                 decoding="sync"
+                {...({ fetchpriority: "high" } as any)}
               />
             </picture>
-            {/* Main Heading */}
+            {/* Main Heading - Critical for LCP */}
             <motion.h1
               {...getOptimizedVariants(0.6, 0)}
-              className="text-5xl md:text-7xl font-bold text-secondary-900 dark:text-white mb-6"
+              className="hero-title"
             >
               Hi, I'm{' '}
               <span className="gradient-text">Alec McCutcheon</span>

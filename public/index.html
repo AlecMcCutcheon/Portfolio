@@ -17,8 +17,8 @@
     
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json">
 
-    <!-- Performance optimizations -->
-    <link rel="preload" href="%PUBLIC_URL%/images/Profile_Image.webp" as="image" type="image/webp">
+    <!-- Performance optimizations - Critical LCP image -->
+    <link rel="preload" href="%PUBLIC_URL%/images/Profile_Image.webp" as="image" type="image/webp" fetchpriority="high">
     <link rel="preload" href="%PUBLIC_URL%/images/CompTIA_badge.webp" as="image" type="image/webp">
 
     <!-- Google Analytics 4 - Privacy Sandbox Future-Proof Implementation -->
@@ -119,7 +119,7 @@
       }
     </script>
 
-    <!-- Google Fonts - Ultra-optimized loading -->
+    <!-- Google Fonts - Non-blocking loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -177,6 +177,52 @@
       .shadow-sm { box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05); }
       .pt-32 { padding-top: 8rem; }
       .overflow-hidden { overflow: hidden; }
+      
+      /* Critical Hero section styles for LCP optimization */
+      .hero-section { 
+        min-height: 80vh; 
+        display: flex; 
+        align-items: center; 
+        justify-content: center; 
+        position: relative; 
+        padding-top: 8rem; 
+        overflow: hidden; 
+      }
+      .profile-image { 
+        width: 144px; 
+        height: 144px; 
+        border-radius: 50%; 
+        margin: 0 auto 2rem; 
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1); 
+        border: 4px solid rgba(255, 255, 255, 0.1); 
+        object-fit: cover; 
+      }
+      .hero-title { 
+        font-size: 3rem; 
+        font-weight: 700; 
+        color: #f8fafc; 
+        margin-bottom: 1.5rem; 
+        text-align: center; 
+      }
+      .hero-subtitle { 
+        font-size: 1.25rem; 
+        color: #cbd5e1; 
+        margin-bottom: 2rem; 
+        text-align: center; 
+      }
+      
+      /* Critical button styles */
+      .btn-primary { 
+        background: linear-gradient(135deg, #3b82f6, #1d4ed8); 
+        color: white; 
+        padding: 0.75rem 1.5rem; 
+        border-radius: 0.5rem; 
+        font-weight: 500; 
+        text-decoration: none; 
+        display: inline-block; 
+        transition: transform 0.2s; 
+      }
+      .btn-primary:hover { transform: translateY(-2px); }
     </style>
   </head>
   <body>
