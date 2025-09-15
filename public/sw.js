@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-const CACHE_VERSION = 'portfolio-v9';
+const CACHE_VERSION = 'portfolio-v10';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;
@@ -72,25 +72,33 @@ self.addEventListener('fetch', (event) => {
     return;
   }
   
+  // Force all requests to go through service worker by responding to ALL requests
+  event.respondWith(handleRequest(request));
+  
   // Debug logging for cache control troubleshooting
   console.log('Service Worker intercepting:', request.url);
+});
 
+// Handle all requests through service worker
+async function handleRequest(request) {
+  const url = new URL(request.url);
+  
   // Determine cache strategy based on request type
   if (url.pathname.includes('/api/') || url.hostname === 'api.github.com' || url.hostname === 'api.emailjs.com') {
-    event.respondWith(networkFirst(request, DYNAMIC_CACHE));
+    return networkFirst(request, DYNAMIC_CACHE);
   } else if (url.pathname.match(/\.(webp|svg|png|jpg|jpeg|gif|ico)$/)) {
     // Images get aggressive caching with explicit cache headers
-    event.respondWith(cacheFirstWithHeaders(request, IMAGE_CACHE));
+    return cacheFirstWithHeaders(request, IMAGE_CACHE);
   } else if (url.pathname.match(/\.(js|css|woff|woff2|ttf|eot|pdf)$/)) {
     // Static assets get aggressive caching with explicit cache headers
-    event.respondWith(cacheFirstWithHeaders(request, STATIC_CACHE));
+    return cacheFirstWithHeaders(request, STATIC_CACHE);
   } else if (url.pathname.endsWith('.html') || url.pathname === '/') {
     // HTML gets stale-while-revalidate
-    event.respondWith(staleWhileRevalidate(request, STATIC_CACHE));
+    return staleWhileRevalidate(request, STATIC_CACHE);
   } else {
-    event.respondWith(networkFirst(request, DYNAMIC_CACHE));
+    return networkFirst(request, DYNAMIC_CACHE);
   }
-});
+}
 
 // Aggressive cache-first strategy with long-term caching
 async function cacheFirst(request, cacheName) {
