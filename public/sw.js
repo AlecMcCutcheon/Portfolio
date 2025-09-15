@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-const CACHE_VERSION = 'portfolio-v11';
+const CACHE_VERSION = 'portfolio-v12';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;
@@ -162,11 +162,15 @@ async function cacheFirstWithHeaders(request, cacheName) {
     if (cached) {
       console.log('Serving from cache with headers:', request.url);
       // Return cached version with explicit cache headers
+      const originalHeaders = Object.fromEntries(cached.headers.entries());
+      // Remove the original cache-control header to avoid conflicts
+      delete originalHeaders['cache-control'];
+      
       const response = new Response(cached.body, {
         status: cached.status,
         statusText: cached.statusText,
         headers: {
-          ...Object.fromEntries(cached.headers.entries()),
+          ...originalHeaders,
           'Cache-Control': 'public, max-age=31536000, immutable',
           'X-Served-By': 'Service-Worker-Cache',
           'X-Cache-TTL': '31536000'
@@ -183,11 +187,15 @@ async function cacheFirstWithHeaders(request, cacheName) {
     // Guard against HTML masquerading as other files (GitHub Pages 404 fallback)
     if (networkResponse.ok && !contentType.includes("text/html")) {
       // Create a new response with enhanced cache headers
+      const originalHeaders = Object.fromEntries(networkResponse.headers.entries());
+      // Remove the original cache-control header to avoid conflicts
+      delete originalHeaders['cache-control'];
+      
       const enhancedResponse = new Response(networkResponse.body, {
         status: networkResponse.status,
         statusText: networkResponse.statusText,
         headers: {
-          ...Object.fromEntries(networkResponse.headers.entries()),
+          ...originalHeaders,
           'Cache-Control': 'public, max-age=31536000, immutable',
           'X-Served-By': 'Service-Worker-Network',
           'X-Cache-TTL': '31536000'
@@ -237,11 +245,15 @@ async function networkFirstWithHeaders(request, cacheName) {
     // Guard against HTML masquerading as other files (GitHub Pages 404 fallback)
     if (networkResponse.ok && !contentType.includes("text/html")) {
       // Create a new response with enhanced cache headers
+      const originalHeaders = Object.fromEntries(networkResponse.headers.entries());
+      // Remove the original cache-control header to avoid conflicts
+      delete originalHeaders['cache-control'];
+      
       const enhancedResponse = new Response(networkResponse.body, {
         status: networkResponse.status,
         statusText: networkResponse.statusText,
         headers: {
-          ...Object.fromEntries(networkResponse.headers.entries()),
+          ...originalHeaders,
           'Cache-Control': 'public, max-age=31536000, immutable',
           'X-Served-By': 'Service-Worker-Network-Forced',
           'X-Cache-TTL': '31536000'
