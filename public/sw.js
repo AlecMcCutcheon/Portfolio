@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-const CACHE_VERSION = 'portfolio-v10';
+const CACHE_VERSION = 'portfolio-v11';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;
@@ -82,6 +82,12 @@ self.addEventListener('fetch', (event) => {
 // Handle all requests through service worker
 async function handleRequest(request) {
   const url = new URL(request.url);
+  
+  // Special handling for main bundle to force network request and cache bust
+  if (url.pathname.includes('/static/js/main.') || url.pathname.includes('/static/css/main.')) {
+    console.log('Force network request for main bundle:', request.url);
+    return networkFirstWithHeaders(request, STATIC_CACHE);
+  }
   
   // Determine cache strategy based on request type
   if (url.pathname.includes('/api/') || url.hostname === 'api.github.com' || url.hostname === 'api.emailjs.com') {
@@ -215,6 +221,44 @@ async function networkFirst(request, cacheName) {
     
     return networkResponse;
   } catch (error) {
+    const cache = await caches.open(cacheName);
+    const cached = await cache.match(request);
+    return cached || new Response('Network error', { status: 408 });
+  }
+}
+
+// Network-first strategy with explicit cache headers
+async function networkFirstWithHeaders(request, cacheName) {
+  try {
+    console.log('Fetching from network with headers (forced):', request.url);
+    const networkResponse = await fetch(request);
+    const contentType = networkResponse.headers.get("content-type") || "";
+    
+    // Guard against HTML masquerading as other files (GitHub Pages 404 fallback)
+    if (networkResponse.ok && !contentType.includes("text/html")) {
+      // Create a new response with enhanced cache headers
+      const enhancedResponse = new Response(networkResponse.body, {
+        status: networkResponse.status,
+        statusText: networkResponse.statusText,
+        headers: {
+          ...Object.fromEntries(networkResponse.headers.entries()),
+          'Cache-Control': 'public, max-age=31536000, immutable',
+          'X-Served-By': 'Service-Worker-Network-Forced',
+          'X-Cache-TTL': '31536000'
+        }
+      });
+      
+      console.log('Enhanced response headers (forced):', Object.fromEntries(enhancedResponse.headers.entries()));
+      
+      // Cache the enhanced response
+      const cache = await caches.open(cacheName);
+      cache.put(request, enhancedResponse.clone());
+      return enhancedResponse;
+    }
+    
+    return networkResponse;
+  } catch (error) {
+    console.log('Network failed, trying cache:', request.url);
     const cache = await caches.open(cacheName);
     const cached = await cache.match(request);
     return cached || new Response('Network error', { status: 408 });
