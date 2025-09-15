@@ -13,9 +13,8 @@
     
     <!-- Performance optimizations -->
     <link rel="preload" href="%PUBLIC_URL%/images/Profile_Image.webp" as="image" type="image/webp">
-    <link rel="preload" href="%PUBLIC_URL%/pdfs/resume.pdf" as="document" type="application/pdf">
+    <link rel="preload" href="%PUBLIC_URL%/pdfs/resume.pdf" as="fetch" type="application/pdf">
     <link rel="preload" href="%PUBLIC_URL%/images/CompTIA_badge.webp" as="image" type="image/webp">
-    <link rel="preload" href="%PUBLIC_URL%/images/Icon.ico" as="image" type="image/x-icon">
     <link rel="preconnect" href="https://api.github.com" crossorigin>
     <link rel="dns-prefetch" href="https://api.github.com">
     <link rel="preconnect" href="https://api.emailjs.com" crossorigin>
@@ -33,6 +32,7 @@
         
         const script = document.createElement('script');
         script.async = true;
+        script.type = 'text/javascript';
         script.src = 'https://www.googletagmanager.com/gtag/js?id=G-7Z3DEDL2G8';
         document.head.appendChild(script);
         
