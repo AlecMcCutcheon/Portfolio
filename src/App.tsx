@@ -6,6 +6,11 @@ import { BackgroundGradientAnimation } from './ui/background-gradient-animation'
 import SectionDivider from './ui/SectionDivider';
 import { useMobileDetection } from './hooks/useMobileDetection';
 import { ScrollDirectionProvider } from './contexts/ScrollDirectionContext';
+// Import SpotlightGlow in main bundle to prevent duplication across chunks
+import SpotlightGlow from './ui/SpotlightGlow';
+
+// Make SpotlightGlow available globally to prevent duplication across chunks
+(window as any).SpotlightGlow = SpotlightGlow;
 
 // Lazy load components for better performance
 const About = lazy(() => import('./components/About'));

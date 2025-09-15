@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Download, Briefcase, GraduationCap, Star, Calendar, MapPin } from 'lucide-react';
-import SpotlightGlow from '../ui/SpotlightGlow';
+// Use global SpotlightGlow to prevent duplication across chunks
+const SpotlightGlow = (window as any).SpotlightGlow;
 
 interface Experience {
   id: number;

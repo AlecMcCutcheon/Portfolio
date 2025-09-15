@@ -6,7 +6,8 @@ import { useEffect } from 'react';
 import { useRef, useLayoutEffect } from 'react';
 import { useCallback } from 'react';
 import { BackgroundGradientAnimation, BackgroundColorContext } from '../ui/background-gradient-animation';
-import SpotlightGlow from '../ui/SpotlightGlow';
+// Use global SpotlightGlow to prevent duplication across chunks
+const SpotlightGlow = (window as any).SpotlightGlow;
 import { GlassCard } from '../ui/GlassCard';
 import { useDirectionalAnimation } from '../hooks/useDirectionalAnimation';
 

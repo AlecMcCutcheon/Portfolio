@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { ExternalLink, Github, Code, Palette, Globe } from 'lucide-react';
-import SpotlightGlow from '../ui/SpotlightGlow';
+// Use global SpotlightGlow to prevent duplication across chunks
+const SpotlightGlow = (window as any).SpotlightGlow;
 import { generateProceduralImage, stableStringify } from '../ui/ProceduralArt';
 import OptimizedImage from '../ui/OptimizedImage';
 import { useDirectionalAnimation } from '../hooks/useDirectionalAnimation';

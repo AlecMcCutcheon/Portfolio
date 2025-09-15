@@ -3,7 +3,8 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Mail, Phone, MapPin, Send, Linkedin, Github, ExternalLink } from 'lucide-react';
 import emailjs from '@emailjs/browser';
-import SpotlightGlow from '../ui/SpotlightGlow';
+// Use global SpotlightGlow to prevent duplication across chunks
+const SpotlightGlow = (window as any).SpotlightGlow;
 
 const Contact: React.FC = () => {
   const [ref, inView] = useInView({
