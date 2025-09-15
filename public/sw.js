@@ -9,6 +9,7 @@ const STATIC_ASSETS = [
   '/manifest.json',
   '/images/Profile_Image.webp',
   '/images/CompTIA_badge.webp',
+  '/images/Icon.ico',
   '/pdfs/resume.pdf'
 ];
 
