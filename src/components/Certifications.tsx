@@ -2,9 +2,9 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Award, Calendar, ExternalLink, CheckCircle } from 'lucide-react';
+import { useDirectionalAnimation } from '../hooks/useDirectionalAnimation';
 // Use global SpotlightGlow to prevent duplication across chunks
 const SpotlightGlow = (window as any).SpotlightGlow;
-import { useDirectionalAnimation } from '../hooks/useDirectionalAnimation';
 
 interface Certification {
   id: number;
