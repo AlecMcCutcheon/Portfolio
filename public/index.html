@@ -15,19 +15,25 @@
     <link rel="preload" href="%PUBLIC_URL%/images/Profile_Image.webp" as="image" type="image/webp">
     <link rel="preload" href="%PUBLIC_URL%/pdfs/resume.pdf" as="document" type="application/pdf">
     <link rel="preconnect" href="https://api.github.com" crossorigin>
+    <link rel="dns-prefetch" href="https://api.github.com">
     <link rel="preconnect" href="https://api.emailjs.com" crossorigin>
+    <link rel="dns-prefetch" href="https://api.emailjs.com">
     
-    <!-- Google tag (gtag.js) - Optimized loading -->
+    <!-- Google tag (gtag.js) - Ultra-optimized loading -->
     <script>
-      // Initialize Google Analytics after page load
-      window.addEventListener('load', function() {
-        // Load gtag script dynamically
+      // Initialize Google Analytics with minimal impact
+      let analyticsLoaded = false;
+      
+      // Load analytics only when user interacts or after delay
+      function loadAnalytics() {
+        if (analyticsLoaded) return;
+        analyticsLoaded = true;
+        
         const script = document.createElement('script');
         script.async = true;
         script.src = 'https://www.googletagmanager.com/gtag/js?id=G-7Z3DEDL2G8';
         document.head.appendChild(script);
         
-        // Initialize gtag
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         window.gtag = gtag;
@@ -35,19 +41,27 @@
         script.onload = function() {
           gtag('js', new Date());
           gtag('config', 'G-7Z3DEDL2G8', {
-            // Optimize for performance
-            send_page_view: false
+            send_page_view: false,
+            // Reduce data collection for performance
+            anonymize_ip: true,
+            allow_google_signals: false,
+            allow_ad_personalization_signals: false
           });
           
-          // Send page view after a delay to not block rendering
-          setTimeout(() => {
-            gtag('event', 'page_view', {
-              page_title: document.title,
-              page_location: window.location.href
-            });
-          }, 100);
+          // Send page view with minimal data
+          gtag('event', 'page_view', {
+            page_title: document.title,
+            page_location: window.location.href
+          });
         };
+      }
+      
+      // Load on user interaction or after 3 seconds
+      ['click', 'scroll', 'keydown'].forEach(event => {
+        document.addEventListener(event, loadAnalytics, { once: true });
       });
+      
+      setTimeout(loadAnalytics, 3000);
     </script>
     
     <!-- Google Fonts - Optimized loading -->

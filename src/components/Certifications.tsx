@@ -157,6 +157,8 @@ const Certifications: React.FC = () => {
                        alt={cert.name + ' badge'}
                        className="w-36 h-36 object-cover"
                        referrerPolicy="no-referrer"
+                       loading="lazy"
+                       decoding="async"
                      />
                    </div>
                  </div>

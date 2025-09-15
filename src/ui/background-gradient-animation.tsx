@@ -611,7 +611,7 @@ export const BackgroundGradientAnimation = ({
 
   // Helper: normalize a point to [0,1] within the container
   function normalizeToContainer(x: number, y: number): { normalizedX: number; normalizedY: number } {
-    const rect = containerRef.current?.getBoundingClientRect();
+    const rect = containerRectRef.current;
     if (!rect) return { normalizedX: 0, normalizedY: 0 };
     let clampedX = x;
     let clampedY = y;
@@ -627,7 +627,7 @@ export const BackgroundGradientAnimation = ({
 
   // Helper: convert window (client) coordinates to normalized [0,1] in container
   function windowToNormalized(x: number, y: number): { normalizedX: number; normalizedY: number } {
-    const rect = containerRef.current?.getBoundingClientRect();
+    const rect = containerRectRef.current;
     if (!rect) return { normalizedX: 0, normalizedY: 0 };
     return {
       normalizedX: (x - rect.left) / rect.width,
@@ -637,7 +637,7 @@ export const BackgroundGradientAnimation = ({
 
   // Helper: convert normalized [0,1] in container to window (client) coordinates
   function normalizedToWindow(normalizedX: number, normalizedY: number): { x: number; y: number } {
-    const rect = containerRef.current?.getBoundingClientRect();
+    const rect = containerRectRef.current;
     if (!rect) return { x: 0, y: 0 };
     return {
       x: rect.left + normalizedX * rect.width,

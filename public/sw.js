@@ -1,4 +1,4 @@
-const CACHE_VERSION = 'portfolio-v2';
+const CACHE_VERSION = 'portfolio-v3';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;
@@ -82,19 +82,40 @@ self.addEventListener('fetch', (event) => {
   }
 });
 
-// Cache-first strategy
+// Cache-first strategy with extended cache lifetime
 async function cacheFirst(request, cacheName) {
   try {
     const cache = await caches.open(cacheName);
     const cached = await cache.match(request);
     
     if (cached) {
-      return cached;
+      // Add cache control headers for better caching
+      const response = new Response(cached.body, {
+        status: cached.status,
+        statusText: cached.statusText,
+        headers: {
+          ...cached.headers,
+          'Cache-Control': 'public, max-age=31536000, immutable',
+          'Expires': new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString()
+        }
+      });
+      return response;
     }
     
     const networkResponse = await fetch(request);
     if (networkResponse.ok) {
-      cache.put(request, networkResponse.clone());
+      // Clone response with extended cache headers
+      const responseToCache = new Response(networkResponse.body, {
+        status: networkResponse.status,
+        statusText: networkResponse.statusText,
+        headers: {
+          ...networkResponse.headers,
+          'Cache-Control': 'public, max-age=31536000, immutable',
+          'Expires': new Date(Date.now() + 365 * 24 * 60 * 60 * 1000).toUTCString()
+        }
+      });
+      cache.put(request, responseToCache.clone());
+      return networkResponse;
     }
     return networkResponse;
   } catch (error) {
