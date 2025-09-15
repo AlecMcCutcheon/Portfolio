@@ -56,7 +56,9 @@ const App: React.FC = () => {
       
       if ('serviceWorker' in navigator && !isDevelopment) {
         window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
+          // Use correct path for GitHub Pages
+          const swPath = window.location.pathname.includes('/Portfolio/') ? '/Portfolio/sw.js' : '/sw.js';
+          navigator.serviceWorker.register(swPath)
             .then((registration) => {
               console.log('Service worker registered successfully');
             })
