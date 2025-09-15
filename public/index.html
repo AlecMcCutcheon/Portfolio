@@ -162,15 +162,39 @@
                 async: node.async,
                 defer: node.defer
               });
+              
+              // Fix MIME type issue: Ensure all scripts have proper type attribute
+              if (!node.type || node.type === '') {
+                node.type = 'text/javascript';
+                console.log('🔧 Fixed MIME type for script:', node.src);
+              }
             }
           });
         });
       });
       
+      // Fix existing scripts that might already be loaded
+      function fixExistingScripts() {
+        const scripts = document.querySelectorAll('script[src]');
+        scripts.forEach(function(script) {
+          if (!script.type || script.type === '') {
+            script.type = 'text/javascript';
+            console.log('🔧 Fixed existing script MIME type:', script.src);
+          }
+        });
+      }
+      
       // Start observing when DOM is ready
       document.addEventListener('DOMContentLoaded', function() {
+        // Fix any scripts that were loaded before the observer started
+        fixExistingScripts();
+        
+        // Start monitoring for new scripts
         observer.observe(document.head, { childList: true, subtree: true });
         console.log('👀 Script observer started');
+        
+        // Also check periodically for any scripts that might be missed
+        setInterval(fixExistingScripts, 1000);
       });
     </script>
     
