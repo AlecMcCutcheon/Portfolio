@@ -769,9 +769,32 @@ const About: React.FC = () => {
   // Live sampling while hovered
   const hoverRAF = useRef<number | null>(null);
   const isHoveringRef = useRef(false);
+  const cachedRectRef = useRef<DOMRect | null>(null);
+  
+  // Invalidate rect cache on resize or scroll
+  useEffect(() => {
+    const invalidateRect = () => {
+      cachedRectRef.current = null;
+    };
+    
+    window.addEventListener('resize', invalidateRect);
+    window.addEventListener('scroll', invalidateRect, { passive: true });
+    
+    return () => {
+      window.removeEventListener('resize', invalidateRect);
+      window.removeEventListener('scroll', invalidateRect);
+    };
+  }, []);
+  
   const sampleSpotlightColor = useCallback(() => {
     if (!titleCardRef.current) return;
-    const rect = titleCardRef.current.getBoundingClientRect();
+    
+    // Cache rect and only update if element position might have changed
+    if (!cachedRectRef.current) {
+      cachedRectRef.current = titleCardRef.current.getBoundingClientRect();
+    }
+    
+    const rect = cachedRectRef.current;
     const windowX = rect.left + titleSpotlightPos.x;
     const windowY = rect.top + titleSpotlightPos.y;
     let colorStr: string | null = null;
@@ -816,7 +839,9 @@ const About: React.FC = () => {
   const innerGlowRAF = useRef<number | null>(null);
   const sampleInnerGlowEdges = useCallback(() => {
     if (!titleCardRef.current) return;
-    const rect = titleCardRef.current.getBoundingClientRect();
+    
+    // Use cached rect if available
+    const rect = cachedRectRef.current || titleCardRef.current.getBoundingClientRect();
     const inset = 8; // sample slightly inside the edge
     const samples = {
       top: { x: rect.left + rect.width / 2, y: rect.top + inset },
@@ -868,7 +893,9 @@ const About: React.FC = () => {
   }, [inView, startInnerGlowLoop, stopInnerGlowLoop]);
   const handleTitleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
     if (!titleCardRef.current) return;
-    const rect = titleCardRef.current.getBoundingClientRect();
+    
+    // Use cached rect if available
+    const rect = cachedRectRef.current || titleCardRef.current.getBoundingClientRect();
     setTitleSpotlightPos({ x: e.clientX - rect.left, y: e.clientY - rect.top });
     // Sample background color from global gradient and tint spotlight
     let colorStr: string | null = null;
