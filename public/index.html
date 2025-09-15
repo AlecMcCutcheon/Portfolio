@@ -243,6 +243,16 @@
           margin: 0 auto 2.5rem;
         }
       }
+      
+      /* Prevent layout shifts in hero container */
+      .hero-section {
+        min-height: 80vh;
+        contain: layout style;
+      }
+      
+      .container-max {
+        contain: layout style;
+      }
       .hero-subtitle { 
         font-size: clamp(1rem, 2.5vw, 1.25rem); 
         color: #cbd5e1; 
