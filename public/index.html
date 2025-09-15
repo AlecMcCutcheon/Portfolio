@@ -15,24 +15,78 @@
     <!-- Performance optimizations -->
     <link rel="preload" href="%PUBLIC_URL%/Profile_Image.jpg" as="image" type="image/jpeg">
     <link rel="preload" href="%PUBLIC_URL%/pdfs/resume.pdf" as="document" type="application/pdf">
-    <link rel="dns-prefetch" href="//api.github.com">
-    <link rel="dns-prefetch" href="//api.emailjs.com">
+    <link rel="preconnect" href="https://api.github.com" crossorigin>
+    <link rel="preconnect" href="https://api.emailjs.com" crossorigin>
     
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-7Z3DEDL2G8"></script>
+    <!-- Google tag (gtag.js) - Optimized loading -->
     <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);} 
-      gtag('js', new Date());
-      gtag('config', 'G-7Z3DEDL2G8');
+      // Initialize Google Analytics after page load
+      window.addEventListener('load', function() {
+        // Load gtag script dynamically
+        const script = document.createElement('script');
+        script.async = true;
+        script.src = 'https://www.googletagmanager.com/gtag/js?id=G-7Z3DEDL2G8';
+        document.head.appendChild(script);
+        
+        // Initialize gtag
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        window.gtag = gtag;
+        
+        script.onload = function() {
+          gtag('js', new Date());
+          gtag('config', 'G-7Z3DEDL2G8', {
+            // Optimize for performance
+            send_page_view: false
+          });
+          
+          // Send page view after a delay to not block rendering
+          setTimeout(() => {
+            gtag('event', 'page_view', {
+              page_title: document.title,
+              page_location: window.location.href
+            });
+          }, 100);
+        };
+      });
     </script>
     
-    <!-- Google Fonts -->
+    <!-- Google Fonts - Optimized loading -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" media="print" onload="this.media='all'">
+    <noscript>
+      <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    </noscript>
     
     <title>Alec McCutcheon - Portfolio</title>
+    
+    <!-- Critical CSS for initial render -->
+    <style>
+      /* Critical styles to prevent layout shifts */
+      html { scroll-behavior: smooth; scroll-padding-top: 40px; }
+      body { 
+        font-family: 'Inter', system-ui, sans-serif; 
+        line-height: 1.6; 
+        background-color: #0f172a; 
+        color: #f8fafc; 
+        margin: 0; 
+        padding: 0;
+      }
+      #root { min-height: 100vh; }
+      /* Prevent flash of unstyled content */
+      .dark { color-scheme: dark; }
+      /* Loading state */
+      .loading-placeholder {
+        background: linear-gradient(90deg, #1e293b 25%, #334155 50%, #1e293b 75%);
+        background-size: 200% 100%;
+        animation: loading 1.5s infinite;
+      }
+      @keyframes loading {
+        0% { background-position: 200% 0; }
+        100% { background-position: -200% 0; }
+      }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
