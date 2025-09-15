@@ -19,12 +19,12 @@
     <link rel="preconnect" href="https://api.emailjs.com" crossorigin>
     <link rel="dns-prefetch" href="https://api.emailjs.com">
     
-    <!-- Google tag (gtag.js) - Ultra-optimized loading -->
+    <!-- Google Analytics 4 - Privacy Sandbox Future-Proof Implementation -->
     <script type="text/javascript">
-      // Initialize Google Analytics with minimal impact
+      // Initialize Google Analytics with Privacy Sandbox compatibility
       let analyticsLoaded = false;
       
-      // Load analytics only when user interacts or after delay
+      // Privacy-focused configuration for future-proofing
       function loadAnalytics() {
         if (analyticsLoaded) return;
         analyticsLoaded = true;
@@ -41,28 +41,54 @@
         
         script.onload = function() {
           gtag('js', new Date());
+          
+          // Privacy Sandbox compatible configuration
           gtag('config', 'G-7Z3DEDL2G8', {
+            // Core privacy settings
             send_page_view: false,
-            // Reduce data collection for performance
             anonymize_ip: true,
             allow_google_signals: false,
-            allow_ad_personalization_signals: false
+            allow_ad_personalization_signals: false,
+            
+            // Privacy Sandbox compatibility
+            cookie_flags: 'SameSite=None;Secure',
+            custom_map: {
+              'custom_parameter_1': 'user_consent'
+            },
+            
+            // Future-proof settings
+            enhanced_conversions: false,
+            allow_enhanced_conversions: false,
+            
+            // Performance optimizations
+            transport_type: 'beacon',
+            use_amp_client_id: false
+          });
+          
+          // Set consent state for Privacy Sandbox compliance
+          gtag('consent', 'default', {
+            'analytics_storage': 'denied',
+            'ad_storage': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied'
           });
           
           // Send page view with minimal data
           gtag('event', 'page_view', {
             page_title: document.title,
-            page_location: window.location.href
+            page_location: window.location.href,
+            // Add first-party data for better attribution
+            custom_parameter_1: 'first_visit'
           });
         };
       }
       
-      // Load on user interaction or after 3 seconds
-      ['click', 'scroll', 'keydown'].forEach(event => {
-        document.addEventListener(event, loadAnalytics, { once: true });
+      // Load on user interaction or after 5 seconds (longer delay for privacy)
+      ['click', 'scroll', 'keydown', 'touchstart'].forEach(event => {
+        document.addEventListener(event, loadAnalytics, { once: true, passive: true });
       });
       
-      setTimeout(loadAnalytics, 3000);
+      setTimeout(loadAnalytics, 5000);
     </script>
     
     <!-- Google Fonts - Ultra-optimized loading -->
