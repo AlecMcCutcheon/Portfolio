@@ -7,9 +7,11 @@ const IMAGE_CACHE = `${CACHE_VERSION}-images`;
 const STATIC_ASSETS = [
   '/',
   '/manifest.json',
-  '/Profile_Image.jpg',
-  '/pdfs/resume.pdf',
-  '/images/CompTIA_badge.png'
+  '/images/Profile_Image.webp',
+  '/images/Profile_Image.jpg',
+  '/images/CompTIA_badge.webp',
+  '/images/CompTIA_badge.png',
+  '/pdfs/resume.pdf'
 ];
 
 // Cache strategies

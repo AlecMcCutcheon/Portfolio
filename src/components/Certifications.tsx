@@ -36,7 +36,7 @@ const Certifications: React.FC = () => {
       issuer: "Central Maine Community College",
       date: "Jan 2022",
       credentialId: "COMP001021438205",
-      image: (process.env.PUBLIC_URL || '') + "/images/CompTIA_badge.png",
+      image: (process.env.PUBLIC_URL || '') + "/images/CompTIA_badge.webp",
       url: "https://www.credly.com/badges/0afe650b-5181-470f-af84-fe9f88c23918/linked_in",
       category: "Professional",
       featured: true,
