@@ -153,14 +153,22 @@ const Certifications: React.FC = () => {
                  <SpotlightGlow className="rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row items-center md:items-stretch gap-8 w-full bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm border border-white/30 dark:border-dark-700/40 ring-1 ring-white/40 dark:ring-white/15 hover:ring-white/50 dark:hover:ring-white/20">
                  <div className="flex-shrink-0 flex items-center justify-center w-full md:w-auto">
                    <div className="w-36 h-36 rounded-xl bg-white/70 dark:bg-dark-800/60 backdrop-blur-sm shadow-md border border-white/30 dark:border-dark-700/40 flex items-center justify-center overflow-hidden ring-1 ring-white/40 dark:ring-white/15">
-                     <img
-                       src={cert.image}
-                       alt={cert.name + ' badge'}
-                       className="w-36 h-36 object-cover"
-                       referrerPolicy="no-referrer"
-                       loading="lazy"
-                       decoding="async"
-                     />
+                     <picture>
+                       <source
+                         srcSet={cert.image}
+                         type="image/webp"
+                       />
+                       <img
+                         src={cert.image}
+                         alt={cert.name + ' badge'}
+                         className="w-36 h-36 object-cover"
+                         referrerPolicy="no-referrer"
+                         loading="lazy"
+                         decoding="async"
+                         width="144"
+                         height="144"
+                       />
+                     </picture>
                    </div>
                  </div>
                  <div className="flex-1 w-full flex flex-col items-center md:items-stretch justify-center text-center md:text-left md:pl-2">
