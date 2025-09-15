@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import Header from './components/Header';
 import Hero from './components/Hero';
@@ -11,10 +10,14 @@ import Contact from './components/Contact';
 import Footer from './components/Footer';
 import { BackgroundGradientAnimation } from './ui/background-gradient-animation';
 import SectionDivider from './ui/SectionDivider';
+import { useMobileDetection } from './hooks/useMobileDetection';
+import { ScrollDirectionProvider } from './contexts/ScrollDirectionContext';
 
 const ENABLE_SECTION_GLASS_OVERLAYS = true;
 
 const App: React.FC = () => {
+  const { shouldReduceEffects } = useMobileDetection();
+  
   useEffect(() => {
     // Initialize EmailJS
     emailjs.init("05vg-yZOLtTcjt36N");
@@ -32,10 +35,18 @@ const App: React.FC = () => {
     }
   }, []);
 
+  // Helper function to get glass overlay classes
+  const getGlassOverlayClasses = (baseClasses: string) => {
+    return shouldReduceEffects 
+      ? baseClasses.replace(/backdrop-blur-\w+/g, '').trim()
+      : baseClasses;
+  };
+
   return (
-    <div className="min-h-screen bg-white dark:bg-dark-950 transition-colors duration-300">
-      <Header />
-      <main>
+    <ScrollDirectionProvider>
+      <div className="min-h-screen bg-white dark:bg-dark-950 transition-colors duration-300">
+        <Header />
+        <main>
         {/* Shared gradient and glass overlay for Hero + About */}
         <div className="relative">
           <div className="absolute inset-0 z-0">
@@ -56,23 +67,25 @@ const App: React.FC = () => {
           <div className="relative z-10 pointer-events-none">
             {/* Hero Section */}
             <div className="relative" style={{ minHeight: '80vh' }}>
-              {ENABLE_SECTION_GLASS_OVERLAYS && (
+              {ENABLE_SECTION_GLASS_OVERLAYS && !shouldReduceEffects && (
                 <div className="absolute inset-0 z-0 pointer-events-none bg-gray-100/70 dark:bg-dark-900/70 backdrop-blur-lg" />
+              )}
+              {ENABLE_SECTION_GLASS_OVERLAYS && shouldReduceEffects && (
+                <div className="absolute inset-0 z-0 pointer-events-none bg-gray-100/80 dark:bg-dark-900/80" />
               )}
               <Hero />
             </div>
-            {/* Glass transition section with About anchor in the middle */}
+            {/* Glass transition section */}
             <div className="relative h-16 md:h-40">
-              <div id="about" style={{ position: 'absolute', top: '50%', left: 0, width: '100%', height: 0 }} />
               {ENABLE_SECTION_GLASS_OVERLAYS && (
                 <>
-                  <div className="absolute inset-0 z-0 pointer-events-none h-full backdrop-blur-sm dark:hidden"
+                  <div className={`absolute inset-0 z-0 pointer-events-none h-full ${shouldReduceEffects ? '' : 'backdrop-blur-sm'} dark:hidden`}
                     style={{
                       background: 'linear-gradient(to bottom, rgba(243,244,246,0.70) 0%, rgba(255,255,255,0.80) 100%)'
                     }}
                   />
                   <div
-                    className="absolute inset-0 z-0 pointer-events-none h-full backdrop-blur-sm hidden dark:block"
+                    className={`absolute inset-0 z-0 pointer-events-none h-full ${shouldReduceEffects ? '' : 'backdrop-blur-sm'} hidden dark:block`}
                     style={{
                       background: 'linear-gradient(to bottom, rgba(15,23,42,0.7) 0%, rgba(22,32,50,0.7) 50%, rgba(30,41,59,0.7) 100%)'
                     }}
@@ -83,14 +96,14 @@ const App: React.FC = () => {
             {/* About Section */}
             <div className="relative" style={{ minHeight: '80vh' }}>
               {ENABLE_SECTION_GLASS_OVERLAYS && (
-                <div className="absolute inset-0 z-0 pointer-events-none bg-white/80 dark:bg-dark-800/70 backdrop-blur-lg" />
+                <div className={`absolute inset-0 z-0 pointer-events-none bg-white/80 dark:bg-dark-800/70 ${getGlassOverlayClasses('backdrop-blur-lg')}`} />
               )}
               <About />
             </div>
             {/* Creative Works Section (inside shared gradient wrapper) */}
             <div className="relative">
               {ENABLE_SECTION_GLASS_OVERLAYS && (
-                <div className="absolute inset-0 z-0 pointer-events-none bg-white/80 dark:bg-dark-800/70 backdrop-blur-lg" />
+                <div className={`absolute inset-0 z-0 pointer-events-none bg-white/80 dark:bg-dark-800/70 ${getGlassOverlayClasses('backdrop-blur-lg')}`} />
               )}
               <div className="relative z-10 pointer-events-none">
                 {/* Divider between About and Creative Works */}
@@ -102,7 +115,7 @@ const App: React.FC = () => {
             {/* Certifications Section (inside shared gradient wrapper) */}
             <div className="relative">
               {ENABLE_SECTION_GLASS_OVERLAYS && (
-                <div className="absolute inset-0 z-0 pointer-events-none bg-white/80 dark:bg-dark-800/70 backdrop-blur-lg" />
+                <div className={`absolute inset-0 z-0 pointer-events-none bg-white/80 dark:bg-dark-800/70 ${getGlassOverlayClasses('backdrop-blur-lg')}`} />
               )}
               <div className="relative z-10 pointer-events-none">
                 {/* Divider between Creative Works and Certifications */}
@@ -116,7 +129,7 @@ const App: React.FC = () => {
             {/* Resume Section (inside shared gradient wrapper) */}
             <div className="relative">
               {ENABLE_SECTION_GLASS_OVERLAYS && (
-                <div className="absolute inset-0 z-0 pointer-events-none bg-white/80 dark:bg-dark-800/70 backdrop-blur-lg" />
+                <div className={`absolute inset-0 z-0 pointer-events-none bg-white/80 dark:bg-dark-800/70 ${getGlassOverlayClasses('backdrop-blur-lg')}`} />
               )}
               <div className="relative z-10 pointer-events-none">
                 {/* Divider between Certifications and Resume */}
@@ -132,7 +145,7 @@ const App: React.FC = () => {
               {/* Contact with uniform (About/Certs) overlay tint */}
               <div className="relative">
                 {ENABLE_SECTION_GLASS_OVERLAYS && (
-                  <div className="absolute inset-0 z-0 pointer-events-none bg-white/80 dark:bg-dark-800/70 backdrop-blur-lg" />
+                  <div className={`absolute inset-0 z-0 pointer-events-none bg-white/80 dark:bg-dark-800/70 ${getGlassOverlayClasses('backdrop-blur-lg')}`} />
                 )}
                 <div className="relative z-10 pointer-events-none">
                   {/* Inline themed divider at the top of Get In Touch (inside overlay) */}
@@ -145,13 +158,13 @@ const App: React.FC = () => {
                 {ENABLE_SECTION_GLASS_OVERLAYS && (
                   <>
                     <div
-                      className="absolute inset-0 z-0 pointer-events-none h-full backdrop-blur-sm dark:hidden"
+                      className={`absolute inset-0 z-0 pointer-events-none h-full ${getGlassOverlayClasses('backdrop-blur-sm')} dark:hidden`}
                       style={{
                         background: 'linear-gradient(to bottom, rgba(255,255,255,0.80) 0%, rgba(226,232,240,0.75) 100%)',
                       }}
                     />
                     <div
-                      className="absolute inset-0 z-0 pointer-events-none h-full backdrop-blur-sm hidden dark:block"
+                      className={`absolute inset-0 z-0 pointer-events-none h-full ${getGlassOverlayClasses('backdrop-blur-sm')} hidden dark:block`}
                       style={{
                         background: 'linear-gradient(to bottom, rgba(31,41,55,0.70) 0%, rgba(15,23,42,0.84) 100%)',
                       }}
@@ -165,11 +178,11 @@ const App: React.FC = () => {
                 {ENABLE_SECTION_GLASS_OVERLAYS && (
                   <>
                     <div
-                      className="absolute inset-0 z-0 pointer-events-none backdrop-blur-lg dark:hidden"
+                      className={`absolute inset-0 z-0 pointer-events-none ${getGlassOverlayClasses('backdrop-blur-lg')} dark:hidden`}
                       style={{ background: 'rgba(226,232,240,0.75)' }}
                     />
                     <div
-                      className="absolute inset-0 z-0 pointer-events-none backdrop-blur-lg hidden dark:block"
+                      className={`absolute inset-0 z-0 pointer-events-none ${getGlassOverlayClasses('backdrop-blur-lg')} hidden dark:block`}
                       style={{ background: 'rgba(15,23,42,0.84)' }}
                     />
                   </>
@@ -181,8 +194,9 @@ const App: React.FC = () => {
             </div>
           </div>
         </div>
-      </main>
-    </div>
+        </main>
+      </div>
+    </ScrollDirectionProvider>
   );
 };
 

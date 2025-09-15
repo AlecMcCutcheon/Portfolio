@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState, createContext } from "react";
 import { cn } from "../lib/utils";
+import { useMobileDetection } from "../hooks/useMobileDetection";
 
 // Context for background color sampling
 export const BackgroundColorContext = createContext<{ getBackgroundColorAt: (x: number, y: number) => string } | undefined>(undefined);
@@ -37,6 +38,7 @@ export const BackgroundGradientAnimation = ({
   containerClassName?: string;
 }) => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { shouldDisableAnimations, shouldReduceEffects } = useMobileDetection();
   const containerRectRef = useRef<DOMRect | null>(null);
   // Update rect on mount and resize
   useEffect(() => {
@@ -718,6 +720,25 @@ export const BackgroundGradientAnimation = ({
     };
   }, []);
 
+  // OLD CODE - KEEP UNTIL CONFIRMED WORKING
+  // Return early for mobile devices to disable animations and gradients
+  if (shouldDisableAnimations) {
+    return (
+      <BackgroundColorContext.Provider value={{ getBackgroundColorAt: () => "rgb(255, 255, 255)" }}>
+        <div
+          ref={containerRef}
+          className={cn(
+            "h-full w-full relative overflow-hidden top-0 left-0 bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-900 dark:to-slate-800 pointer-events-none",
+            containerClassName
+          )}
+        >
+          {children}
+        </div>
+      </BackgroundColorContext.Provider>
+    );
+  }
+
+  // NEW CODE - TESTING
   return (
     <BackgroundColorContext.Provider value={{ getBackgroundColorAt }}>
       <>

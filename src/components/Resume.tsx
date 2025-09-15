@@ -27,7 +27,8 @@ interface Education {
 const Resume: React.FC = () => {
   const [ref, inView] = useInView({
     triggerOnce: true,
-    threshold: 0.01,
+    threshold: 0.1,
+    rootMargin: '50px 0px'
   });
 
   const [activeTab, setActiveTab] = useState<'experience' | 'education' | 'skills'>('experience');
@@ -165,7 +166,7 @@ const Resume: React.FC = () => {
           ref={ref}
           initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.4 }}
           className="text-center mb-16"
         >
           {/* Resume header */}
@@ -242,7 +243,7 @@ const Resume: React.FC = () => {
                   key={exp.id}
                   initial={{ opacity: 0, x: -50 }}
                   animate={inView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
+                  transition={{ duration: 0.3, delay: 0.2 + index * 0.05 }}
                   className="pointer-events-auto"
                 >
                   <SpotlightGlow className="rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm border border-white/30 dark:border-dark-700/40 ring-1 ring-white/40 dark:ring-white/15">
@@ -302,7 +303,7 @@ const Resume: React.FC = () => {
                   key={edu.id}
                   initial={{ opacity: 0, x: -50 }}
                   animate={inView ? { opacity: 1, x: 0 } : {}}
-                  transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
+                  transition={{ duration: 0.3, delay: 0.2 + index * 0.05 }}
                   className="pointer-events-auto"
                 >
                   <SpotlightGlow className="rounded-xl p-8 shadow-lg hover:shadow-xl transition-all duration-300 bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm border border-white/30 dark:border-dark-700/40 ring-1 ring-white/40 dark:ring-white/15">
@@ -343,7 +344,7 @@ const Resume: React.FC = () => {
                   key={category.category}
                   initial={{ opacity: 0, y: 30 }}
                   animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
+                  transition={{ duration: 0.3, delay: 0.2 + index * 0.05 }}
                   className="pointer-events-auto"
                 >
                   <SpotlightGlow className="rounded-xl p-8 shadow-lg transition-all bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm border border-white/30 dark:border-dark-700/40 ring-1 ring-white/40 dark:ring-white/15">
@@ -365,7 +366,7 @@ const Resume: React.FC = () => {
                           <motion.div
                             initial={{ width: 0 }}
                             animate={inView ? { width: `${skill.level}%` } : {}}
-                            transition={{ duration: 1, delay: 0.8 + index * 0.1 }}
+                            transition={{ duration: 0.5, delay: 0.4 + index * 0.05 }}
                             className="h-2 rounded-full bg-primary-500/80 dark:bg-primary-300/80 ring-1 ring-white/30"
                           />
                         </div>

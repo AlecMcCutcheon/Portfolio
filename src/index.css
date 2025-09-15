@@ -5,6 +5,7 @@
 @layer base {
   html {
     scroll-behavior: smooth;
+    scroll-padding-top: 40px; /* Account for fixed header height + some spacing */
   }
   
   body {
@@ -82,6 +83,72 @@
   50% { transform: translateY(-90px) scale(1.15); }
 }
 .animate-float-slow { animation: float-slow 18s ease-in-out infinite alternate; }
+
+/* Mobile Performance Optimizations */
+@media (max-width: 767px) {
+  /* Prevent horizontal scroll on the page */
+  html, body {
+    overflow-x: hidden;
+    width: 100%;
+    max-width: 100vw;
+  }
+
+  /* Disable all animations on mobile for better performance */
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  /* Disable transform animations */
+  .animate-float-slow,
+  .animate-float-medium,
+  .animate-float-fast {
+    animation: none !important;
+    transform: none !important;
+  }
+  
+  /* Reduce backdrop blur on mobile */
+  .backdrop-blur,
+  .backdrop-blur-sm,
+  .backdrop-blur-md,
+  .backdrop-blur-lg,
+  .backdrop-blur-xl {
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
+  }
+  
+  /* Disable hover effects on mobile */
+  .hover\:shadow-lg:hover,
+  .hover\:-translate-y-1:hover,
+  .hover\:scale-105:hover,
+  .hover\:bg-primary-700:hover {
+    transform: none !important;
+    box-shadow: none !important;
+    background-color: inherit !important;
+  }
+}
+
+/* Reduced motion preferences */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+  
+  .animate-float-slow,
+  .animate-float-medium,
+  .animate-float-fast {
+    animation: none !important;
+  }
+}
 .animate-float-medium { animation: float-medium 14s ease-in-out infinite alternate; }
 .animate-float-fast { animation: float-fast 10s ease-in-out infinite alternate; } 
 

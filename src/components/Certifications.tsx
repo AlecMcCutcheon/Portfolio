@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { Award, Calendar, ExternalLink, CheckCircle } from 'lucide-react';
 import SpotlightGlow from '../ui/SpotlightGlow';
+import { useDirectionalAnimation } from '../hooks/useDirectionalAnimation';
 
 interface Certification {
   id: number;
@@ -19,7 +20,13 @@ interface Certification {
 // Removed external badge fetching to avoid rate limits on static hosting
 
 const Certifications: React.FC = () => {
-  const [ref, inView] = useInView({ triggerOnce: true, threshold: 0.01 });
+  const { getDirectionalVariants, getStaggeredDirectionalVariants } = useDirectionalAnimation();
+  
+  const [ref, inView] = useInView({ 
+    triggerOnce: false, 
+    threshold: 0.1,
+    rootMargin: '50px 0px'
+  });
 
   // Split certifications into professional and achievements
   const professionalCerts = [
@@ -103,9 +110,7 @@ const Certifications: React.FC = () => {
     <section id="certifications" ref={ref} className="section-padding relative z-10 pointer-events-none bg-transparent">
       <div className="container-max">
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
+          {...getDirectionalVariants(0.4, 0)}
           className="text-center mb-16"
         >
           {/** # OLD CODE - KEEP UNTIL CONFIRMED WORKING
@@ -130,9 +135,7 @@ const Certifications: React.FC = () => {
 
         {/* Professional Certifications */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.2 }}
+          {...getDirectionalVariants(0.4, 0.2)}
           className="mb-16"
         >
           <h3 className="text-2xl font-bold text-secondary-900 dark:text-white text-center mb-8">
@@ -143,9 +146,7 @@ const Certifications: React.FC = () => {
               {professionalCerts.map((cert, index) => (
                 <motion.div
                   key={cert.id}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
+                  {...getStaggeredDirectionalVariants(0.3, 0.2, 0.05)(index)}
                   className="relative max-w-xl mx-auto pointer-events-auto"
                 >
                  <SpotlightGlow className="rounded-lg p-8 shadow-lg hover:shadow-xl transition-all duration-300 flex flex-col md:flex-row items-center md:items-stretch gap-8 w-full bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm border border-white/30 dark:border-dark-700/40 ring-1 ring-white/40 dark:ring-white/15 hover:ring-white/50 dark:hover:ring-white/20">
@@ -206,9 +207,7 @@ const Certifications: React.FC = () => {
 
         {/* Achievements & Certificates */}
         <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8, delay: 0.6 }}
+          {...getDirectionalVariants(0.4, 0.6)}
         >
           <h3 className="text-2xl font-bold text-secondary-900 dark:text-white text-center mb-8">
             Achievements & Certificates
@@ -219,9 +218,7 @@ const Certifications: React.FC = () => {
               return (
               <motion.div
                 key={cert.id}
-                initial={{ opacity: 0, y: 30 }}
-                animate={inView ? { opacity: 1, y: 0 } : {}}
-                transition={{ duration: 0.6, delay: 0.8 + index * 0.1 }}
+                {...getStaggeredDirectionalVariants(0.3, 0.4, 0.05)(index)}
                 className={`pointer-events-auto w-full ${isLastOdd ? 'sm:col-span-2 sm:max-w-xl sm:mx-auto' : ''}`}
               >
                 {/* OLD CODE - KEEP UNTIL CONFIRMED WORKING

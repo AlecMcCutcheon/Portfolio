@@ -54,11 +54,11 @@ const Header: React.FC = () => {
     <motion.header
       initial={{ y: -100 }}
       animate={{ y: 0 }}
-      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-300 w-full ${
         isScrolled ? 'bg-white/95 dark:bg-dark-950/95 backdrop-blur-md shadow-lg dark:shadow-dark-900/50' : 'bg-transparent'
       }`}
     >
-      <div className="container-max">
+      <div className="w-full max-w-7xl mx-auto">
         <div className="flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
           {/* Logo */}
           <motion.div

@@ -4,6 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { ExternalLink, Github, Code, Palette, Globe } from 'lucide-react';
 import SpotlightGlow from '../ui/SpotlightGlow';
 import { generateProceduralImage, stableStringify } from '../ui/ProceduralArt';
+import { useDirectionalAnimation } from '../hooks/useDirectionalAnimation';
 
 interface GitHubRepo {
   id: number;
@@ -37,9 +38,12 @@ interface Project {
 }
 
 const CreativeWorks: React.FC = () => {
+  const { getDirectionalVariants, getStaggeredDirectionalVariants } = useDirectionalAnimation();
+  
   const [ref, inView] = useInView({
-    triggerOnce: true,
-    threshold: 0.01,
+    triggerOnce: false,
+    threshold: 0.1,
+    rootMargin: '50px 0px'
   });
 
   const [activeFilter, setActiveFilter] = useState<string>('all');
@@ -418,9 +422,7 @@ const CreativeWorks: React.FC = () => {
     <section id="works" ref={ref} className="section-padding relative z-10 pointer-events-none bg-transparent">
       <div className="container-max">
         <motion.div
-          initial={{ opacity: 0, y: 50 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
+          {...getDirectionalVariants(0.4, 0)}
           className="text-center mb-16"
         >
           {/* Badge-themed container (matches About title card) */}
@@ -468,9 +470,7 @@ const CreativeWorks: React.FC = () => {
           {filteredProjects.map((project, index) => (
             <motion.div
               key={project.id}
-              initial={{ opacity: 0, y: 50 }}
-              animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
+              {...getStaggeredDirectionalVariants(0.3, 0.2, 0.05)(index)}
               className="pointer-events-auto h-full"
             >
               <SpotlightGlow className="rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 card-hover flex flex-col h-full bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm border border-white/30 dark:border-dark-700/40 ring-1 ring-white/40 dark:ring-white/15 hover:ring-white/50 dark:hover:ring-white/20">

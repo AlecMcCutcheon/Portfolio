@@ -8,7 +8,8 @@ import SpotlightGlow from '../ui/SpotlightGlow';
 const Contact: React.FC = () => {
   const [ref, inView] = useInView({
     triggerOnce: true,
-    threshold: 0.01,
+    threshold: 0.1,
+    rootMargin: '50px 0px'
   });
 
   const [formData, setFormData] = useState({
@@ -113,7 +114,7 @@ const Contact: React.FC = () => {
           ref={ref}
           initial={{ opacity: 0, y: 50 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.8 }}
+          transition={{ duration: 0.4 }}
           className="text-center mb-16"
         >
           {/* Section header */}
@@ -130,7 +131,7 @@ const Contact: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, x: -50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.2 }}
+            transition={{ duration: 0.4, delay: 0.1 }}
           >
             <h3 className="text-2xl font-bold text-secondary-900 dark:text-white mb-8">
               Let's Connect
@@ -142,7 +143,7 @@ const Contact: React.FC = () => {
                   key={info.title}
                   initial={{ opacity: 0, y: 20 }}
                   animate={inView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.6, delay: 0.4 + index * 0.1 }}
+                  transition={{ duration: 0.3, delay: 0.2 + index * 0.05 }}
                   className="flex items-center gap-4"
                 >
                   <SpotlightGlow className="w-12 h-12 rounded-lg flex items-center justify-center bg-white/60 dark:bg-dark-800/50 backdrop-blur-sm border border-white/30 dark:border-dark-700/40 ring-1 ring-white/40 dark:ring-white/15 text-primary-600 dark:text-primary-400 shadow-md">
@@ -177,7 +178,7 @@ const Contact: React.FC = () => {
                     rel="noopener noreferrer"
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={inView ? { opacity: 1, scale: 1 } : {}}
-                    transition={{ duration: 0.4, delay: 0.8 + index * 0.1 }}
+                    transition={{ duration: 0.3, delay: 0.4 + index * 0.05 }}
                     className="w-10 h-10 rounded-lg flex items-center justify-center text-secondary-600 dark:text-secondary-400 transition-all duration-200 bg-white/60 dark:bg-dark-800/50 backdrop-blur-sm border border-white/30 dark:border-dark-700/40 ring-1 ring-white/40 dark:ring-white/15 shadow-md hover:scale-[1.05] hover:shadow-lg hover:ring-white/60 dark:hover:ring-white/30 hover:bg-white/70 dark:hover:bg-dark-800/60"
                   >
                     {social.icon}
@@ -190,7 +191,7 @@ const Contact: React.FC = () => {
             <motion.div
               initial={{ opacity: 0, y: 20 }}
               animate={inView ? { opacity: 1, y: 0 } : {}}
-              transition={{ duration: 0.6, delay: 1.2 }}
+              transition={{ duration: 0.3, delay: 0.6 }}
               className="mt-8 pointer-events-auto"
             >
               <SpotlightGlow className="p-6 rounded-lg bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm border border-white/30 dark:border-dark-700/40 ring-1 ring-white/40 dark:ring-white/15 shadow-lg hover:shadow-xl transition-all duration-300">
@@ -216,7 +217,7 @@ const Contact: React.FC = () => {
           <motion.div
             initial={{ opacity: 0, x: 50 }}
             animate={inView ? { opacity: 1, x: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.4 }}
+            transition={{ duration: 0.4, delay: 0.2 }}
           >
             <form onSubmit={handleSubmit} className="space-y-6 pointer-events-auto">
               <div className="grid md:grid-cols-2 gap-6">

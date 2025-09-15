@@ -8,6 +8,7 @@ import { useCallback } from 'react';
 import { BackgroundGradientAnimation, BackgroundColorContext } from '../ui/background-gradient-animation';
 import SpotlightGlow from '../ui/SpotlightGlow';
 import { GlassCard } from '../ui/GlassCard';
+import { useDirectionalAnimation } from '../hooks/useDirectionalAnimation';
 
 // Define regions as {name, topMin, topMax, leftMin, leftMax}
 type Region = { name: string; topMin: number; topMax: number; leftMin: number; leftMax: number };
@@ -665,17 +666,28 @@ const ENABLE_ABOUT_GLASS_OVERLAY = false;
 
 const About: React.FC = () => {
   const containerRef = useRef<HTMLDivElement>(null);
+  const { getDirectionalVariants, getStaggeredDirectionalVariants } = useDirectionalAnimation();
+  
   // About section animation
   const [ref, inView] = useInView({
     triggerOnce: true,
-    threshold: 0.01,
+    threshold: 0.1,
+    rootMargin: '50px 0px'
   });
 
   // Skills section animation
-  const [skillsRef, skillsInView] = useInView({ triggerOnce: true, threshold: 0.01 });
+  const [skillsRef, skillsInView] = useInView({ 
+    triggerOnce: true, 
+    threshold: 0.1,
+    rootMargin: '50px 0px'
+  });
 
-  // Values section animation
-  const [valuesRef, valuesInView] = useInView({ triggerOnce: true, threshold: 0.01 });
+  // Values section animation - allow retriggering for directional animations
+  const [valuesRef, valuesInView] = useInView({ 
+    triggerOnce: false, 
+    threshold: 0.1,
+    rootMargin: '50px 0px'
+  });
 
   const skills = [
     'PowerShell', 'System Administration', 'Web Development', 'HTML/CSS/JavaScript', 
@@ -1400,9 +1412,7 @@ const About: React.FC = () => {
         <section id="values" ref={valuesRef} className="section-padding relative z-10 pointer-events-none">
         <div className="container-max">
           <motion.div
-            initial={{ opacity: 0, y: 50 }}
-            animate={valuesInView ? { opacity: 1, y: 0 } : {}}
-            transition={{ duration: 0.8, delay: 0.8 }}
+            {...getDirectionalVariants(0.4, 0.4)}
             className="mt-0"
           >
             <h3 className="text-3xl font-bold text-secondary-900 dark:text-white text-center mb-12">
@@ -1412,9 +1422,7 @@ const About: React.FC = () => {
               {values.map((value, index) => (
                 <motion.div
                   key={value.title}
-                  initial={{ opacity: 0, y: 30 }}
-                  animate={valuesInView ? { opacity: 1, y: 0 } : {}}
-                  transition={{ duration: 0.6, delay: 1 + index * 0.2 }}
+                  {...getStaggeredDirectionalVariants(0.3, 0.5, 0.1)(index)}
                   /* # OLD CODE - KEEP UNTIL CONFIRMED WORKING (no glow)
                   className="text-center p-6 bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm rounded-2xl shadow-lg border border-white/30 dark:border-dark-700/40 pointer-events-auto hover:shadow-xl hover:bg-white/55 dark:hover:bg-dark-800/45 transition-all duration-300"
                   */

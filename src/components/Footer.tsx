@@ -56,6 +56,14 @@ const Footer: React.FC = () => {
               </li>
               <li>
                 <a 
+                  href="#certifications" 
+                  className="text-secondary-600 dark:text-secondary-300 hover:text-primary-600 dark:hover:text-white transition-colors duration-200"
+                >
+                  Certifications
+                </a>
+              </li>
+              <li>
+                <a 
                   href="#resume" 
                   className="text-secondary-600 dark:text-secondary-300 hover:text-primary-600 dark:hover:text-white transition-colors duration-200"
                 >
