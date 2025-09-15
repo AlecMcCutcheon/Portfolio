@@ -1,5 +1,5 @@
 /* eslint-disable no-restricted-globals */
-const CACHE_VERSION = 'portfolio-v8';
+const CACHE_VERSION = 'portfolio-v9';
 const STATIC_CACHE = `${CACHE_VERSION}-static`;
 const DYNAMIC_CACHE = `${CACHE_VERSION}-dynamic`;
 const IMAGE_CACHE = `${CACHE_VERSION}-images`;
@@ -72,17 +72,18 @@ self.addEventListener('fetch', (event) => {
     return;
   }
   
-  // Debug logging removed for production
+  // Debug logging for cache control troubleshooting
+  console.log('Service Worker intercepting:', request.url);
 
   // Determine cache strategy based on request type
   if (url.pathname.includes('/api/') || url.hostname === 'api.github.com' || url.hostname === 'api.emailjs.com') {
     event.respondWith(networkFirst(request, DYNAMIC_CACHE));
   } else if (url.pathname.match(/\.(webp|svg|png|jpg|jpeg|gif|ico)$/)) {
-    // Images get aggressive caching
-    event.respondWith(cacheFirst(request, IMAGE_CACHE));
+    // Images get aggressive caching with explicit cache headers
+    event.respondWith(cacheFirstWithHeaders(request, IMAGE_CACHE));
   } else if (url.pathname.match(/\.(js|css|woff|woff2|ttf|eot|pdf)$/)) {
-    // Static assets get aggressive caching
-    event.respondWith(cacheFirst(request, STATIC_CACHE));
+    // Static assets get aggressive caching with explicit cache headers
+    event.respondWith(cacheFirstWithHeaders(request, STATIC_CACHE));
   } else if (url.pathname.endsWith('.html') || url.pathname === '/') {
     // HTML gets stale-while-revalidate
     event.respondWith(staleWhileRevalidate(request, STATIC_CACHE));
@@ -124,6 +125,57 @@ async function cacheFirst(request, cacheName) {
           ...Object.fromEntries(networkResponse.headers.entries()),
           'Cache-Control': 'public, max-age=31536000, immutable',
           'X-Served-By': 'Service-Worker-Network'
+        }
+      });
+      
+      // Cache the enhanced response
+      cache.put(request, enhancedResponse.clone());
+      return enhancedResponse;
+    }
+    
+    return networkResponse;
+  } catch (error) {
+    return new Response('Network error', { status: 408 });
+  }
+}
+
+// Aggressive cache-first strategy with explicit cache headers
+async function cacheFirstWithHeaders(request, cacheName) {
+  try {
+    const cache = await caches.open(cacheName);
+    const cached = await cache.match(request);
+    
+    if (cached) {
+      console.log('Serving from cache with headers:', request.url);
+      // Return cached version with explicit cache headers
+      const response = new Response(cached.body, {
+        status: cached.status,
+        statusText: cached.statusText,
+        headers: {
+          ...Object.fromEntries(cached.headers.entries()),
+          'Cache-Control': 'public, max-age=31536000, immutable',
+          'X-Served-By': 'Service-Worker-Cache',
+          'X-Cache-TTL': '31536000'
+        }
+      });
+      return response;
+    }
+    
+    console.log('Fetching from network with headers:', request.url);
+    const networkResponse = await fetch(request);
+    const contentType = networkResponse.headers.get("content-type") || "";
+    
+    // Guard against HTML masquerading as other files (GitHub Pages 404 fallback)
+    if (networkResponse.ok && !contentType.includes("text/html")) {
+      // Create a new response with enhanced cache headers
+      const enhancedResponse = new Response(networkResponse.body, {
+        status: networkResponse.status,
+        statusText: networkResponse.statusText,
+        headers: {
+          ...Object.fromEntries(networkResponse.headers.entries()),
+          'Cache-Control': 'public, max-age=31536000, immutable',
+          'X-Served-By': 'Service-Worker-Network',
+          'X-Cache-TTL': '31536000'
         }
       });
       

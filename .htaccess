@@ -1,0 +1,18 @@
+# Apache .htaccess for GitHub Pages cache control
+<IfModule mod_headers.c>
+    # Cache static assets for 1 year
+    <FilesMatch "\.(js|css|webp|png|jpg|jpeg|gif|ico|svg|woff|woff2|ttf|eot|pdf)$">
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+    
+    # Cache HTML files for 1 hour
+    <FilesMatch "\.(html|htm)$">
+        Header set Cache-Control "public, max-age=3600"
+    </FilesMatch>
+    
+    # Service worker specific headers
+    <FilesMatch "sw\.js$">
+        Header set Content-Type "application/javascript"
+        Header set Cache-Control "public, max-age=31536000, immutable"
+    </FilesMatch>
+</IfModule>
