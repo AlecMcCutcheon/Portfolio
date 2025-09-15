@@ -140,6 +140,7 @@ const Footer: React.FC = () => {
             whileHover={{ scale: 1.1 }}
             whileTap={{ scale: 0.9 }}
             className="w-10 h-10 rounded-full flex items-center justify-center transition-colors duration-200 text-primary-700 dark:text-primary-300 bg-primary-100/50 dark:bg-primary-900/40 ring-1 ring-white/40 dark:ring-white/15 hover:ring-white/50 dark:hover:ring-white/20 backdrop-blur-sm pointer-events-auto"
+            aria-label="Scroll to top"
           >
             <ArrowUp size={20} />
           </motion.button>

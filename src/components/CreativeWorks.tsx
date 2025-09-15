@@ -527,6 +527,7 @@ const CreativeWorks: React.FC = () => {
                             target="_blank"
                             rel="noopener noreferrer"
                             className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-secondary-700 hover:text-primary-600 transition-colors duration-200"
+                            aria-label={`View ${project.title} live site`}
                           >
                             <ExternalLink size={20} />
                           </a>
@@ -538,6 +539,7 @@ const CreativeWorks: React.FC = () => {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-secondary-700 hover:text-primary-600 transition-colors duration-200"
+                          aria-label={`View ${project.title} source code on GitHub`}
                         >
                           <Github size={20} />
                         </a>
