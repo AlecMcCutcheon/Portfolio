@@ -59,7 +59,7 @@ const App: React.FC = () => {
 
   return (
     <ScrollDirectionProvider>
-      <div className="min-h-screen bg-white dark:bg-dark-950 transition-colors duration-300">
+      <div className="min-h-screen bg-white dark:bg-dark-950 transition-colors duration-300 overflow-x-hidden">
         <Header />
         <main>
         {/* Shared gradient and glass overlay for Hero + About */}
