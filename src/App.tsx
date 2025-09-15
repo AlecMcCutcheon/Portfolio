@@ -51,18 +51,28 @@ const App: React.FC = () => {
       // Yield again
       await new Promise(resolve => setTimeout(resolve, 0));
       
-      // Register service worker
+      // Register service worker - TEMPORARILY DISABLED TO TEST MIME TYPE ISSUE
+      // Unregister any existing service workers to test if they're causing MIME type errors
       if ('serviceWorker' in navigator) {
-        window.addEventListener('load', () => {
-          navigator.serviceWorker.register('/sw.js')
-            .then((registration) => {
-              // Service worker registered successfully
-            })
-            .catch((registrationError) => {
-              // Service worker registration failed silently
-            });
+        navigator.serviceWorker.getRegistrations().then(function(registrations) {
+          for(let registration of registrations) {
+            registration.unregister();
+            console.log('Service worker unregistered for testing');
+          }
         });
       }
+      
+      // if ('serviceWorker' in navigator) {
+      //   window.addEventListener('load', () => {
+      //     navigator.serviceWorker.register('/sw.js')
+      //       .then((registration) => {
+      //         // Service worker registered successfully
+      //       })
+      //       .catch((registrationError) => {
+      //         // Service worker registration failed silently
+      //       });
+      //   });
+      // }
     };
 
     initializeApp();
