@@ -8,9 +8,7 @@ const STATIC_ASSETS = [
   '/',
   '/manifest.json',
   '/images/Profile_Image.webp',
-  '/images/Profile_Image.jpg',
   '/images/CompTIA_badge.webp',
-  '/images/CompTIA_badge.png',
   '/pdfs/resume.pdf'
 ];
 
@@ -72,7 +70,7 @@ self.addEventListener('fetch', (event) => {
   // Determine cache strategy based on request type
   if (url.pathname.includes('/api/') || url.hostname === 'api.github.com' || url.hostname === 'api.emailjs.com') {
     event.respondWith(networkFirst(request, DYNAMIC_CACHE));
-  } else if (url.pathname.match(/\.(jpg|jpeg|png|gif|webp|svg)$/)) {
+  } else if (url.pathname.match(/\.(webp|svg)$/)) {
     event.respondWith(cacheFirst(request, IMAGE_CACHE));
   } else if (url.pathname.endsWith('.html') || url.pathname === '/') {
     event.respondWith(staleWhileRevalidate(request, STATIC_CACHE));

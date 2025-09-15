@@ -23,14 +23,11 @@ const Hero: React.FC = () => {
         <div className="container-max section-padding relative z-10">
           <div className="text-center max-w-4xl mx-auto">
             {/* Profile Image */}
-            <picture>
-              <source srcSet={`${process.env.PUBLIC_URL || ''}/images/Profile_Image.webp`} type="image/webp" />
-              <img
-                src={`${process.env.PUBLIC_URL || ''}/images/Profile_Image.jpg`}
-                alt="Alec McCutcheon profile"
-                className="w-36 h-36 rounded-full mx-auto mb-8 shadow-lg border-4 border-white dark:border-dark-800 object-cover"
-              />
-            </picture>
+            <img
+              src={`${process.env.PUBLIC_URL || ''}/images/Profile_Image.webp`}
+              alt="Alec McCutcheon profile"
+              className="w-36 h-36 rounded-full mx-auto mb-8 shadow-lg border-4 border-white dark:border-dark-800 object-cover"
+            />
             {/* Main Heading */}
             <motion.h1
               {...getOptimizedVariants(0.6, 0)}
