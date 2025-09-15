@@ -403,11 +403,7 @@ function MovingBlob({
     };
   }, [targetPos, idx]);
 
-  // DEBUG: Log this blob's position on every move
-  useEffect(() => {
-    // eslint-disable-next-line no-console
-    console.log(`Blob ${idx} position: [${targetPos.top.toFixed(1)}, ${targetPos.left.toFixed(1)}]`);
-  }, [targetPos, idx]);
+  // Position tracking for blob movement
 
   // State for color adaptation
   const [currentGradientIdx, setCurrentGradientIdx] = useState(gradientIdx);
@@ -621,8 +617,7 @@ const BlobsBackground: React.FC<BlobsBackgroundProps> = ({ count, containerRef }
   useEffect(() => {
     if (blobs.length > 0) {
       const positions = blobs.map(b => b && b.targetPos ? `[${b.targetPos.top.toFixed(1)},${b.targetPos.left.toFixed(1)}]` : '[]').join(' ');
-      // eslint-disable-next-line no-console
-      console.log('Blob positions:', positions);
+    // Blob positions updated
     }
   }, [blobs]);
 

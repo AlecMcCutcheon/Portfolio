@@ -21,7 +21,6 @@ export const ScrollDirectionProvider: React.FC<{ children: React.ReactNode }> = 
                            scrollY < lastScrollY ? 'up' : scrollDirection;
         
         if (newDirection !== scrollDirection) {
-          console.log('Scroll direction changed to:', newDirection);
           setScrollDirection(newDirection);
         }
         setLastScrollY(scrollY);

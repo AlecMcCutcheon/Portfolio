@@ -18,8 +18,6 @@ export const useDirectionalAnimation = () => {
   const getDirectionalVariants = (baseDuration: number = 0.4, baseDelay: number = 0) => {
     const isScrollingUp = scrollDirection === 'up';
     
-    console.log('Creating directional variants for scroll direction:', scrollDirection, 'isScrollingUp:', isScrollingUp, 'y value:', isScrollingUp ? 30 : -30);
-    
     return {
       initial: { 
         opacity: 0, 
