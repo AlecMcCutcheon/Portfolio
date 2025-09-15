@@ -1,17 +1,19 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, Suspense, lazy } from 'react';
 import emailjs from '@emailjs/browser';
 import Header from './components/Header';
 import Hero from './components/Hero';
-import About from './components/About';
-import CreativeWorks from './components/CreativeWorks';
-import Certifications from './components/Certifications';
-import Resume from './components/Resume';
-import Contact from './components/Contact';
-import Footer from './components/Footer';
 import { BackgroundGradientAnimation } from './ui/background-gradient-animation';
 import SectionDivider from './ui/SectionDivider';
 import { useMobileDetection } from './hooks/useMobileDetection';
 import { ScrollDirectionProvider } from './contexts/ScrollDirectionContext';
+
+// Lazy load components for better performance
+const About = lazy(() => import('./components/About'));
+const CreativeWorks = lazy(() => import('./components/CreativeWorks'));
+const Certifications = lazy(() => import('./components/Certifications'));
+const Resume = lazy(() => import('./components/Resume'));
+const Contact = lazy(() => import('./components/Contact'));
+const Footer = lazy(() => import('./components/Footer'));
 
 const ENABLE_SECTION_GLASS_OVERLAYS = true;
 
@@ -32,6 +34,19 @@ const App: React.FC = () => {
       document.documentElement.classList.add('dark');
     } else {
       document.documentElement.classList.remove('dark');
+    }
+    
+    // Register service worker
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+          .then((registration) => {
+            console.log('SW registered: ', registration);
+          })
+          .catch((registrationError) => {
+            console.log('SW registration failed: ', registrationError);
+          });
+      });
     }
   }, []);
 
@@ -98,7 +113,9 @@ const App: React.FC = () => {
               {ENABLE_SECTION_GLASS_OVERLAYS && (
                 <div className={`absolute inset-0 z-0 pointer-events-none bg-white/80 dark:bg-dark-800/70 ${getGlassOverlayClasses('backdrop-blur-lg')}`} />
               )}
-              <About />
+              <Suspense fallback={<div className="min-h-[80vh] flex items-center justify-center"><div className="animate-pulse text-gray-500">Loading...</div></div>}>
+                <About />
+              </Suspense>
             </div>
             {/* Creative Works Section (inside shared gradient wrapper) */}
             <div className="relative">
@@ -108,7 +125,9 @@ const App: React.FC = () => {
               <div className="relative z-10 pointer-events-none">
                 {/* Divider between About and Creative Works */}
                 <SectionDivider />
-                <CreativeWorks />
+                <Suspense fallback={<div className="min-h-[80vh] flex items-center justify-center"><div className="animate-pulse text-gray-500">Loading...</div></div>}>
+                  <CreativeWorks />
+                </Suspense>
               </div>
             </div>
 
@@ -120,7 +139,9 @@ const App: React.FC = () => {
               <div className="relative z-10 pointer-events-none">
                 {/* Divider between Creative Works and Certifications */}
                 <SectionDivider />
-                <Certifications />
+                <Suspense fallback={<div className="min-h-[80vh] flex items-center justify-center"><div className="animate-pulse text-gray-500">Loading...</div></div>}>
+                  <Certifications />
+                </Suspense>
               </div>
             </div>
 
@@ -134,7 +155,9 @@ const App: React.FC = () => {
               <div className="relative z-10 pointer-events-none">
                 {/* Divider between Certifications and Resume */}
                 <SectionDivider />
-                <Resume />
+                <Suspense fallback={<div className="min-h-[80vh] flex items-center justify-center"><div className="animate-pulse text-gray-500">Loading...</div></div>}>
+                  <Resume />
+                </Suspense>
               </div>
             </div>
 
@@ -150,7 +173,9 @@ const App: React.FC = () => {
                 <div className="relative z-10 pointer-events-none">
                   {/* Inline themed divider at the top of Get In Touch (inside overlay) */}
                   <SectionDivider />
-                  <Contact />
+                  <Suspense fallback={<div className="min-h-[80vh] flex items-center justify-center"><div className="animate-pulse text-gray-500">Loading...</div></div>}>
+                    <Contact />
+                  </Suspense>
                 </div>
               </div>
               {/* Transition from Contact (lighter) to Footer (darker) */}
@@ -188,7 +213,9 @@ const App: React.FC = () => {
                   </>
                 )}
                 <div className="relative z-10 pointer-events-none">
-                  <Footer />
+                  <Suspense fallback={<div className="min-h-[40vh] flex items-center justify-center"><div className="animate-pulse text-gray-500">Loading...</div></div>}>
+                    <Footer />
+                  </Suspense>
                 </div>
               </div>
             </div>

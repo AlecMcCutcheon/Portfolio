@@ -1,10 +1,10 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { ChevronDown, Download, Mail } from 'lucide-react';
-import { useMotionReduction } from '../hooks/useMotionReduction';
+import { usePerformanceOptimizedAnimation } from '../hooks/usePerformanceOptimizedAnimation';
 
 const Hero: React.FC = () => {
-  const { shouldDisableAnimations, variants } = useMotionReduction();
+  const { shouldDisableAnimations, getOptimizedVariants } = usePerformanceOptimizedAnimation();
   
   const scrollToAbout = () => {
     const element = document.querySelector('#about');
@@ -30,9 +30,7 @@ const Hero: React.FC = () => {
             />
             {/* Main Heading */}
             <motion.h1
-              initial={variants.fadeInUp.hidden}
-              animate={variants.fadeInUp.visible}
-              transition={variants.fadeInUp.transition}
+              {...getOptimizedVariants(0.6, 0)}
               className="text-5xl md:text-7xl font-bold text-secondary-900 dark:text-white mb-6"
             >
               Hi, I'm{' '}
@@ -41,9 +39,7 @@ const Hero: React.FC = () => {
 
             {/* Subtitle */}
             <motion.div
-              initial={variants.fadeInUp.hidden}
-              animate={variants.fadeInUp.visible}
-              transition={{ ...variants.fadeInUp.transition, delay: shouldDisableAnimations ? 0 : 0.2 }}
+              {...getOptimizedVariants(0.5, shouldDisableAnimations ? 0 : 0.15)}
               className="flex flex-wrap justify-center gap-3 mb-8"
             >
               {[
@@ -64,9 +60,7 @@ const Hero: React.FC = () => {
 
             {/* Description */}
             <motion.div
-              initial={variants.fadeInUp.hidden}
-              animate={variants.fadeInUp.visible}
-              transition={{ ...variants.fadeInUp.transition, delay: shouldDisableAnimations ? 0 : 0.4 }}
+              {...getOptimizedVariants(0.5, shouldDisableAnimations ? 0 : 0.3)}
               className="mb-12 max-w-3xl mx-auto"
             >
               <p className="text-lg text-secondary-500 dark:text-secondary-400">
@@ -82,9 +76,7 @@ const Hero: React.FC = () => {
 
             {/* CTA Buttons */}
             <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, delay: 0.3 }}
+              {...getOptimizedVariants(0.4, shouldDisableAnimations ? 0 : 0.25)}
               className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-16"
             >
               {/* Download Resume CTA */}
@@ -121,9 +113,7 @@ const Hero: React.FC = () => {
 
             {/* Scroll Indicator */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 0.4, delay: 0.5 }}
+              {...getOptimizedVariants(0.3, shouldDisableAnimations ? 0 : 0.4)}
               className="flex justify-center"
             >
               <button
@@ -132,8 +122,8 @@ const Hero: React.FC = () => {
               >
                 <span className="text-sm mb-2">Learn More</span>
                 <motion.div
-                  animate={{ y: [0, 10, 0] }}
-                  transition={{ duration: 2, repeat: Infinity }}
+                  animate={shouldDisableAnimations ? {} : { y: [0, 10, 0] }}
+                  transition={shouldDisableAnimations ? {} : { duration: 2, repeat: Infinity }}
                 >
                   <ChevronDown size={24} />
                 </motion.div>

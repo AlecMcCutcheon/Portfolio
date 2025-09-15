@@ -12,6 +12,12 @@
     <link rel="apple-touch-icon" href="%PUBLIC_URL%/logo192.png" />
     <link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
     
+    <!-- Performance optimizations -->
+    <link rel="preload" href="%PUBLIC_URL%/Profile_Image.jpg" as="image" type="image/jpeg">
+    <link rel="preload" href="%PUBLIC_URL%/pdfs/resume.pdf" as="document" type="application/pdf">
+    <link rel="dns-prefetch" href="//api.github.com">
+    <link rel="dns-prefetch" href="//api.emailjs.com">
+    
     <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-7Z3DEDL2G8"></script>
     <script>

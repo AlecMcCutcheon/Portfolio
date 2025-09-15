@@ -4,6 +4,7 @@ import { useInView } from 'react-intersection-observer';
 import { ExternalLink, Github, Code, Palette, Globe } from 'lucide-react';
 import SpotlightGlow from '../ui/SpotlightGlow';
 import { generateProceduralImage, stableStringify } from '../ui/ProceduralArt';
+import OptimizedImage from '../ui/OptimizedImage';
 import { useDirectionalAnimation } from '../hooks/useDirectionalAnimation';
 
 interface GitHubRepo {
@@ -35,6 +36,7 @@ interface Project {
   stars: number;
   updatedAt: string;
   seed?: string;
+  isCurrentWebsite?: boolean;
 }
 
 const CreativeWorks: React.FC = () => {
@@ -254,7 +256,7 @@ const CreativeWorks: React.FC = () => {
         const clientWebsites = [
           {
             id: 1000,
-            title: "Personal Portfolio",
+            title: "Personal Portfolio (This Website)",
             description: "Modern, responsive portfolio website showcasing my work as an adaptable technologist, creative problem-solver, and lifelong learner. Features smooth directional animations, mobile optimization, and interactive sections including creative works, certifications, and professional background.",
             image: generateProceduralImage(stableStringify({ url: 'https://alecmccutcheon.github.io/Portfolio/', title: 'Personal Portfolio' })),
             category: "design" as const,
@@ -264,7 +266,8 @@ const CreativeWorks: React.FC = () => {
             featured: false,
             stars: 1,
             updatedAt: new Date().toISOString(),
-            seed: stableStringify({ url: 'https://alecmccutcheon.github.io/Portfolio/', title: 'Personal Portfolio' })
+            seed: stableStringify({ url: 'https://alecmccutcheon.github.io/Portfolio/', title: 'Personal Portfolio' }),
+            isCurrentWebsite: true
           },
           {
             id: 9991,
@@ -490,10 +493,13 @@ const CreativeWorks: React.FC = () => {
               <SpotlightGlow className="rounded-xl overflow-hidden shadow-lg hover:shadow-xl transition-all duration-300 card-hover flex flex-col h-full bg-white/50 dark:bg-dark-800/40 backdrop-blur-sm border border-white/30 dark:border-dark-700/40 ring-1 ring-white/40 dark:ring-white/15 hover:ring-white/50 dark:hover:ring-white/20">
                 {/* Project Image */}
                 <div className={`relative overflow-hidden ${project.category === 'design' ? 'h-64' : 'h-56'}`}>
-                  <img
-                    src={project.githubUrl !== '#' ? generateProceduralImage(project.seed || (project.title + '|' + project.description)) : project.image}
+                  <OptimizedImage
+                    data={project.githubUrl !== '#' ? (project.seed || (project.title + '|' + project.description)) : project.image}
+                    width={800}
+                    height={project.category === 'design' ? 256 : 224}
                     alt={project.title}
                     className={`w-full h-full transition-transform duration-300 hover:scale-110 object-cover`}
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
                   />
                   {project.featured && project.category !== 'design' && (
                     <>
@@ -511,14 +517,20 @@ const CreativeWorks: React.FC = () => {
                   <div className="absolute inset-0 bg-black bg-opacity-0 hover:bg-opacity-20 transition-all duration-300 flex items-center justify-center">
                     <div className="opacity-0 hover:opacity-100 transition-opacity duration-300 flex gap-4">
                       {project.liveUrl && (
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-secondary-700 hover:text-primary-600 transition-colors duration-200"
-                        >
-                          <ExternalLink size={20} />
-                        </a>
+                        project.isCurrentWebsite ? (
+                          <div className="w-10 h-10 bg-green-100 dark:bg-green-900/40 rounded-full flex items-center justify-center text-green-700 dark:text-green-300">
+                            <span className="text-xs font-medium">✓</span>
+                          </div>
+                        ) : (
+                          <a
+                            href={project.liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-10 h-10 bg-white rounded-full flex items-center justify-center text-secondary-700 hover:text-primary-600 transition-colors duration-200"
+                          >
+                            <ExternalLink size={20} />
+                          </a>
+                        )
                       )}
                       {project.category !== 'design' && (
                         <a
@@ -569,14 +581,21 @@ const CreativeWorks: React.FC = () => {
                     {/* Action Buttons */}
                     <div className="flex gap-3">
                       {project.liveUrl && (
-                        <a
-                          href={project.liveUrl}
-                          target="_blank"
-                          rel="noopener noreferrer"
-                          className="flex-1 inline-flex items-center justify-center gap-2 text-primary-700 dark:text-primary-300 px-4 py-2 font-medium text-base shadow-md pointer-events-auto cursor-pointer hover:shadow-lg hover:scale-[1.02] bg-primary-100/50 dark:bg-primary-900/40 rounded-lg transition-all duration-300 ring-1 ring-white/40 dark:ring-white/15 hover:ring-white/50 dark:hover:ring-white/20"
-                        >
-                          View Live
-                        </a>
+                        project.isCurrentWebsite ? (
+                          <div className="flex-1 inline-flex items-center justify-center gap-2 text-green-700 dark:text-green-300 px-4 py-2 font-medium text-base shadow-md bg-green-100/50 dark:bg-green-900/40 rounded-lg ring-1 ring-green-200 dark:ring-green-800">
+                            <span className="text-sm">✓</span>
+                            Currently Viewing
+                          </div>
+                        ) : (
+                          <a
+                            href={project.liveUrl}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="flex-1 inline-flex items-center justify-center gap-2 text-primary-700 dark:text-primary-300 px-4 py-2 font-medium text-base shadow-md pointer-events-auto cursor-pointer hover:shadow-lg hover:scale-[1.02] bg-primary-100/50 dark:bg-primary-900/40 rounded-lg transition-all duration-300 ring-1 ring-white/40 dark:ring-white/15 hover:ring-white/50 dark:hover:ring-white/20"
+                          >
+                            View Live
+                          </a>
+                        )
                       )}
                       {project.category !== 'design' && (
                         <a
