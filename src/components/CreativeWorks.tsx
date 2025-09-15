@@ -183,9 +183,9 @@ const CreativeWorks: React.FC = () => {
           throw new Error('Invalid response from GitHub API');
         }
         
-        // Filter out forks, archived repos, and sort by stars and update date
+        // Filter out forks, archived repos, Portfolio repo, and sort by stars and update date
         const filteredRepos = repos
-          .filter(repo => !repo.fork && !repo.archived && repo.description)
+          .filter(repo => !repo.fork && !repo.archived && repo.description && repo.name !== 'Portfolio')
           .sort((a, b) => b.stargazers_count - a.stargazers_count || new Date(b.updated_at).getTime() - new Date(a.updated_at).getTime());
 
         const projectImages = [
@@ -252,6 +252,20 @@ const CreativeWorks: React.FC = () => {
 
         // Add client websites to the projects
         const clientWebsites = [
+          {
+            id: 1000,
+            title: "Personal Portfolio",
+            description: "Modern, responsive portfolio website showcasing my work as an adaptable technologist, creative problem-solver, and lifelong learner. Features smooth directional animations, mobile optimization, and interactive sections including creative works, certifications, and professional background.",
+            image: generateProceduralImage(stableStringify({ url: 'https://alecmccutcheon.github.io/Portfolio/', title: 'Personal Portfolio' })),
+            category: "design" as const,
+            technologies: ["React", "TypeScript", "Tailwind CSS", "Framer Motion", "Responsive Design"],
+            liveUrl: "https://alecmccutcheon.github.io/Portfolio/",
+            githubUrl: "https://github.com/AlecMcCutcheon/Portfolio",
+            featured: false,
+            stars: 1,
+            updatedAt: new Date().toISOString(),
+            seed: stableStringify({ url: 'https://alecmccutcheon.github.io/Portfolio/', title: 'Personal Portfolio' })
+          },
           {
             id: 9991,
             title: "One Bridge Consulting",
